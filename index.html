@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Simulador de Pruebas Saber Pro. Prepárate con cuestionarios interactivos por módulo, retroalimentación inmediata y seguimiento de progreso.">
+  <title>Simulador Saber Pro — Prepárate para tu examen</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+
+  <!-- Favicon emoji -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📝</text></svg>">
+</head>
+<body>
+  <div class="app-layout">
+
+    <!-- ── Header ── -->
+    <header class="app-header">
+      <div class="header-inner">
+        <a href="#home" class="header-brand" aria-label="Ir al inicio">
+          <div class="header-logo">SP</div>
+          <div>
+            <div class="header-title">Saber Pro</div>
+            <div class="header-subtitle">Simulador de Pruebas</div>
+          </div>
+        </a>
+        <div class="header-actions">
+          <button class="theme-toggle" id="theme-toggle" aria-label="Cambiar tema">🌙</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- ── Main Content (SPA container) ── -->
+    <main class="app-main" id="app">
+      <!-- El contenido se renderiza dinámicamente por renderer.js -->
+      <div class="empty-state" style="padding: var(--spacing-16)">
+        <div class="loading-spinner" style="margin: 0 auto"></div>
+        <p style="margin-top: var(--spacing-4); color: var(--color-text-muted)">Cargando simulador...</p>
+      </div>
+    </main>
+
+    <!-- ── Footer ── -->
+    <footer class="app-footer">
+      <div class="footer-inner">
+        <p>Simulador Saber Pro &copy; 2026 — Plataforma educativa de práctica</p>
+        <p style="margin-top: var(--spacing-1); font-size: var(--font-size-xs)">
+          Preguntas basadas en materiales del ICFES, Constitución Política de Colombia y fuentes académicas.
+        </p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ── JavaScript (orden de dependencias) ── -->
+  <!-- Utilidades -->
+  <script src="js/utils/helpers.js"></script>
+
+  <!-- Datos -->
+  <script src="js/data/modules-config.js"></script>
+  <script src="js/data/lectura-critica.js"></script>
+  <script src="js/data/razonamiento-cuantitativo.js"></script>
+  <script src="js/data/competencias-ciudadanas.js"></script>
+  <script src="js/data/comunicacion-escrita.js"></script>
+  <script src="js/data/ingles.js"></script>
+  <script src="js/data/problematicas-psicologicas.js"></script>
+
+  <!-- Motor -->
+  <script src="js/engine/storage.js"></script>
+  <script src="js/engine/quiz-engine.js"></script>
+
+  <!-- UI -->
+  <script src="js/ui/theme.js"></script>
+  <script src="js/ui/modal.js"></script>
+  <script src="js/ui/components.js"></script>
+  <script src="js/ui/renderer.js"></script>
+
+  <!-- Punto de entrada -->
+  <script src="js/app.js"></script>
+</body>
+</html>
