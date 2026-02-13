@@ -51,6 +51,9 @@ const Renderer = (() => {
             case 'stats':
                 _renderStats();
                 break;
+            case 'study':
+                _renderStudy(param);
+                break;
             case 'home':
             default:
                 _renderHome();
@@ -107,6 +110,8 @@ const Renderer = (() => {
         </div>
 
         <div style="text-align: center; margin-top: var(--spacing-8)">
+          <button class="btn btn-primary" id="btn-go-study" style="margin-bottom: var(--spacing-4); width: 100%; max-width: 400px;">📚 Biblioteca de Estudio</button>
+          <br>
           <button class="btn btn-ghost" id="btn-view-stats">📊 Ver Estadísticas</button>
           ${stats.allPassed ? `<button class="btn btn-danger btn-sm" id="btn-reset-all" style="margin-left: var(--spacing-3)">🔄 Reiniciar Todo</button>` : ''}
         </div>
@@ -151,6 +156,10 @@ const Renderer = (() => {
         // Estadísticas
         const statsBtn = document.getElementById('btn-view-stats');
         if (statsBtn) statsBtn.addEventListener('click', () => navigateTo('#stats'));
+
+        // Biblioteca de estudio
+        const studyBtn = document.getElementById('btn-go-study');
+        if (studyBtn) studyBtn.addEventListener('click', () => navigateTo('#study'));
 
         // Reiniciar
         const resetBtn = document.getElementById('btn-reset-all');
@@ -337,6 +346,36 @@ const Renderer = (() => {
                 '¿Estás seguro de que quieres reiniciar todo tu progreso? Esta acción no se puede deshacer.',
                 () => { StorageManager.resetProgress(); navigateTo('#home'); }
             );
+        });
+    }
+
+    // ────────────────────────────────────────────────
+    // STUDY VIEW
+    // ────────────────────────────────────────────────
+
+    function _renderStudy(moduleId) {
+        const activeId = moduleId || 'lectura-critica';
+        const main = document.getElementById('app');
+        main.innerHTML = Components.studyLayout(MODULES_CONFIG, activeId);
+        _bindStudyEvents();
+    }
+
+    function _bindStudyEvents() {
+        // Switch de módulos en el menú
+        document.querySelectorAll('[data-study-id]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const studyId = btn.getAttribute('data-study-id');
+                navigateTo(`#study/${studyId}`);
+            });
+        });
+
+        // Volver al inicio
+        document.getElementById('btn-study-close')?.addEventListener('click', () => navigateTo('#home'));
+
+        // Practicar módulo directamente
+        document.getElementById('btn-start-quiz-from-study')?.addEventListener('click', (e) => {
+            const moduleId = e.currentTarget.getAttribute('data-module-id');
+            navigateTo(`#quiz/${moduleId}`);
         });
     }
 

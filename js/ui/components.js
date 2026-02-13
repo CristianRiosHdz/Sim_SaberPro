@@ -5,37 +5,37 @@
 
 const Components = (() => {
 
-    /**
-     * Renderiza la tarjeta de un módulo.
-     */
-    function moduleCard(module, index, isUnlocked, result) {
-        const number = index + 1;
-        const isCompleted = result && result.passed;
-        const isFailed = result && !result.passed;
+  /**
+   * Renderiza la tarjeta de un módulo.
+   */
+  function moduleCard(module, index, isUnlocked, result) {
+    const number = index + 1;
+    const isCompleted = result && result.passed;
+    const isFailed = result && !result.passed;
 
-        let statusClass = 'status-locked';
-        let statusText = '🔒 Bloqueado';
-        let cardClass = 'card card-interactive module-card';
+    let statusClass = 'status-locked';
+    let statusText = '🔒 Bloqueado';
+    let cardClass = 'card card-interactive module-card';
 
-        if (isCompleted) {
-            statusClass = 'status-completed';
-            statusText = '✅ Aprobado';
-            cardClass += ' module-card-completed';
-        } else if (isFailed) {
-            statusClass = 'status-failed';
-            statusText = '❌ No aprobado';
-        } else if (isUnlocked) {
-            statusClass = 'status-available';
-            statusText = '▶️ Disponible';
-        } else {
-            cardClass += ' module-card-locked';
-        }
+    if (isCompleted) {
+      statusClass = 'status-completed';
+      statusText = '✅ Aprobado';
+      cardClass += ' module-card-completed';
+    } else if (isFailed) {
+      statusClass = 'status-failed';
+      statusText = '❌ No aprobado';
+    } else if (isUnlocked) {
+      statusClass = 'status-available';
+      statusText = '▶️ Disponible';
+    } else {
+      cardClass += ' module-card-locked';
+    }
 
-        const scoreHtml = result
-            ? `<span class="module-card-score">${result.score}/100</span>`
-            : '';
+    const scoreHtml = result
+      ? `<span class="module-card-score">${result.score}/100</span>`
+      : '';
 
-        return `
+    return `
       <div class="${cardClass}" data-module-id="${module.id}" role="button" tabindex="0" aria-label="Módulo ${number}: ${escapeHtml(module.name)}">
         <span class="module-card-number">${isCompleted ? '✓' : number}</span>
         <div class="module-card-icon">${module.icon}</div>
@@ -47,14 +47,14 @@ const Components = (() => {
         </div>
       </div>
     `;
-    }
+  }
 
-    /**
-     * Renderiza la barra de progreso global.
-     */
-    function progressBar(completed, total, label = 'Progreso General') {
-        const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
-        return `
+  /**
+   * Renderiza la barra de progreso global.
+   */
+  function progressBar(completed, total, label = 'Progreso General') {
+    const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+    return `
       <div class="progress-bar-wrapper">
         <div class="progress-bar-label">
           <span>${escapeHtml(label)}</span>
@@ -65,58 +65,58 @@ const Components = (() => {
         </div>
       </div>
     `;
-    }
+  }
 
-    /**
-     * Renderiza la pregunta actual del quiz.
-     */
-    function questionCard(quizState, feedbackData) {
-        const q = quizState.currentQuestion;
-        if (!q) return '<div class="empty-state"><p>No hay pregunta disponible.</p></div>';
+  /**
+   * Renderiza la pregunta actual del quiz.
+   */
+  function questionCard(quizState, feedbackData) {
+    const q = quizState.currentQuestion;
+    if (!q) return '<div class="empty-state"><p>No hay pregunta disponible.</p></div>';
 
-        const contextHtml = q.context
-            ? `<div class="question-context">${escapeHtml(q.context)}</div>`
-            : '';
+    const contextHtml = q.context
+      ? `<div class="question-context">${escapeHtml(q.context)}</div>`
+      : '';
 
-        const timerHtml = quizState.timeLimit
-            ? `<div class="question-timer ${quizState.remainingSeconds <= 60 ? 'question-timer-warning' : ''}" id="quiz-timer">
+    const timerHtml = quizState.timeLimit
+      ? `<div class="question-timer ${quizState.remainingSeconds <= 60 ? 'question-timer-warning' : ''}" id="quiz-timer">
            ⏱️ ${formatTime(quizState.remainingSeconds)}
          </div>`
-            : '';
+      : '';
 
-        const hasAnswered = feedbackData !== null;
+    const hasAnswered = feedbackData !== null;
 
-        const optionsHtml = q.options.map((opt, i) => {
-            let optClass = 'option-btn';
-            if (hasAnswered) {
-                optClass += ' option-disabled';
-                if (opt.id === q.correctAnswer) {
-                    optClass += ' option-btn-correct';
-                } else if (opt.id === feedbackData?.selectedId && !feedbackData.isCorrect) {
-                    optClass += ' option-btn-incorrect';
-                }
-            }
+    const optionsHtml = q.options.map((opt, i) => {
+      let optClass = 'option-btn';
+      if (hasAnswered) {
+        optClass += ' option-disabled';
+        if (opt.id === q.correctAnswer) {
+          optClass += ' option-btn-correct';
+        } else if (opt.id === feedbackData?.selectedId && !feedbackData.isCorrect) {
+          optClass += ' option-btn-incorrect';
+        }
+      }
 
-            return `
+      return `
         <button class="${optClass}" data-option-id="${opt.id}" ${hasAnswered ? 'disabled' : ''}>
           <span class="option-letter">${getOptionLetter(i)}</span>
           <span class="option-text">${escapeHtml(opt.text)}</span>
         </button>
       `;
-        }).join('');
+    }).join('');
 
-        const explanationHtml = hasAnswered
-            ? `<div class="explanation-box ${feedbackData.isCorrect ? 'explanation-correct' : 'explanation-incorrect'}">
+    const explanationHtml = hasAnswered
+      ? `<div class="explanation-box ${feedbackData.isCorrect ? 'explanation-correct' : 'explanation-incorrect'}">
            <div class="explanation-title">
              ${feedbackData.isCorrect ? '✅ ¡Correcto!' : '❌ Incorrecto'}
            </div>
            <p>${escapeHtml(feedbackData.explanation)}</p>
          </div>`
-            : '';
+      : '';
 
-        const navButtonText = quizState.isLastQuestion ? 'Finalizar' : 'Siguiente →';
+    const navButtonText = quizState.isLastQuestion ? 'Finalizar' : 'Siguiente →';
 
-        return `
+    return `
       <div class="question-container fade-in">
         <div class="question-header">
           <span class="question-counter">Pregunta ${quizState.currentIndex + 1} de ${quizState.totalQuestions}</span>
@@ -137,22 +137,22 @@ const Components = (() => {
         </div>
       </div>
     `;
-    }
+  }
 
-    /**
-     * Renderiza la pantalla de resultados.
-     */
-    function resultsScreen(result) {
-        const strokeColor = result.passed ? 'var(--color-success)' : 'var(--color-danger)';
-        const circumference = 2 * Math.PI * 72;
-        const offset = circumference - (result.score / 100) * circumference;
+  /**
+   * Renderiza la pantalla de resultados.
+   */
+  function resultsScreen(result) {
+    const strokeColor = result.passed ? 'var(--color-success)' : 'var(--color-danger)';
+    const circumference = 2 * Math.PI * 72;
+    const offset = circumference - (result.score / 100) * circumference;
 
-        const recommendations = _getRecommendations(result);
-        const recsHtml = recommendations.map(r =>
-            `<div class="recommendation-item"><span class="recommendation-icon">${r.icon}</span><span>${escapeHtml(r.text)}</span></div>`
-        ).join('');
+    const recommendations = _getRecommendations(result);
+    const recsHtml = recommendations.map(r =>
+      `<div class="recommendation-item"><span class="recommendation-icon">${r.icon}</span><span>${escapeHtml(r.text)}</span></div>`
+    ).join('');
 
-        return `
+    return `
       <div class="results-container slide-up">
         <div class="results-score-ring">
           <svg width="180" height="180" viewBox="0 0 180 180">
@@ -172,9 +172,9 @@ const Components = (() => {
         </p>
         <p class="results-summary">
           ${result.passed
-                ? `Has aprobado el módulo de <strong>${escapeHtml(result.moduleName)}</strong>. ¡Puedes continuar al siguiente módulo!`
-                : `Necesitas ${result.passingScore} puntos para aprobar. Puedes intentarlo de nuevo con nuevas preguntas.`
-            }
+        ? `Has aprobado el módulo de <strong>${escapeHtml(result.moduleName)}</strong>. ¡Puedes continuar al siguiente módulo!`
+        : `Necesitas ${result.passingScore} puntos para aprobar. Puedes intentarlo de nuevo con nuevas preguntas.`
+      }
         </p>
 
         <div class="results-details">
@@ -214,13 +214,13 @@ const Components = (() => {
         ` : ''}
       </div>
     `;
-    }
+  }
 
-    /**
-     * Renderiza el panel de estadísticas.
-     */
-    function statsPanel(stats) {
-        return `
+  /**
+   * Renderiza el panel de estadísticas.
+   */
+  function statsPanel(stats) {
+    return `
       <div class="slide-up">
         <div class="page-header">
           <h1 class="page-title">📊 Estadísticas</h1>
@@ -254,27 +254,83 @@ const Components = (() => {
         </div>
       </div>
     `;
-    }
+  }
 
-    /**
-     * Genera recomendaciones según el resultado.
-     * @private
-     */
-    function _getRecommendations(result) {
-        const recs = [];
-        if (result.score < 50) {
-            recs.push({ icon: '📚', text: 'Repasa los fundamentos del módulo antes de intentar de nuevo.' });
-            recs.push({ icon: '🔍', text: 'Presta atención a las explicaciones de cada respuesta para entender la lógica.' });
-        } else if (result.score < 70) {
-            recs.push({ icon: '📝', text: 'Estás cerca del umbral. Enfócate en las áreas donde fallaste.' });
-            recs.push({ icon: '⏱️', text: 'Tómate más tiempo para analizar cada pregunta antes de responder.' });
-        } else if (result.score < 90) {
-            recs.push({ icon: '🌟', text: '¡Buen desempeño! Refuerza los temas donde tuviste errores.' });
-        } else {
-            recs.push({ icon: '🏆', text: '¡Excelente! Dominas este módulo. Sigue así.' });
-        }
-        return recs;
+  /**
+   * Genera recomendaciones según el resultado.
+   * @private
+   */
+  function _getRecommendations(result) {
+    const recs = [];
+    if (result.score < 50) {
+      recs.push({ icon: '📚', text: 'Repasa los fundamentos del módulo antes de intentar de nuevo.' });
+      recs.push({ icon: '🔍', text: 'Presta atención a las explicaciones de cada respuesta para entender la lógica.' });
+    } else if (result.score < 70) {
+      recs.push({ icon: '📝', text: 'Estás cerca del umbral. Enfócate en las áreas donde fallaste.' });
+      recs.push({ icon: '⏱️', text: 'Tómate más tiempo para analizar cada pregunta antes de responder.' });
+    } else if (result.score < 90) {
+      recs.push({ icon: '🌟', text: '¡Buen desempeño! Refuerza los temas donde tuviste errores.' });
+    } else {
+      recs.push({ icon: '🏆', text: '¡Excelente! Dominas este módulo. Sigue así.' });
     }
+    return recs;
+  }
 
-    return { moduleCard, progressBar, questionCard, resultsScreen, statsPanel };
+  /**
+   * Renderiza la vista de biblioteca de estudio.
+   */
+  function studyLayout(modules, activeModuleId) {
+    const activeModule = modules.find(m => m.id === activeModuleId) || modules[0];
+    const content = STUDY_CONTENT[activeModule.id];
+
+    const menuHtml = modules.map(mod => `
+            <button class="study-menu-item ${mod.id === activeModuleId ? 'active' : ''}" data-study-id="${mod.id}">
+                <span class="study-menu-icon">${mod.icon}</span>
+                <span class="study-menu-text">${escapeHtml(mod.name)}</span>
+            </button>
+        `).join('');
+
+    const sectionsHtml = content.sections.map(sec => `
+            <section class="study-section">
+                <h3 class="study-section-title">${escapeHtml(sec.subtitle)}</h3>
+                <div class="study-section-body">${sec.content}</div>
+            </section>
+        `).join('');
+
+    return `
+            <div class="study-container slide-up">
+                <div class="page-header">
+                    <h1 class="page-title">📚 Biblioteca de Estudio</h1>
+                    <p class="page-description">Consulta conceptos clave y tips para cada módulo del examen.</p>
+                </div>
+
+                <div class="study-grid">
+                    <aside class="study-sidebar">
+                        <nav class="study-menu">
+                            ${menuHtml}
+                        </nav>
+                        <button class="btn btn-ghost btn-block" id="btn-study-close" style="margin-top: var(--spacing-4)">← Volver al Inicio</button>
+                    </aside>
+
+                    <article class="study-main card">
+                        <div class="study-header" style="border-bottom: 2px solid ${activeModule.color}20">
+                            <div class="study-header-icon" style="background: ${activeModule.color}10; color: ${activeModule.color}">${activeModule.icon}</div>
+                            <div>
+                                <h2 class="study-module-title">${escapeHtml(content.title)}</h2>
+                                <p class="study-module-desc">${escapeHtml(activeModule.description)}</p>
+                            </div>
+                        </div>
+                        <div class="study-body">
+                            ${sectionsHtml}
+                        </div>
+                        <div class="study-footer">
+                            <button class="btn btn-primary" id="btn-start-quiz-from-study" data-module-id="${activeModule.id}"> Practicar este módulo ▶️</button>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        `;
+  }
+
+  return { moduleCard, progressBar, questionCard, resultsScreen, statsPanel, studyLayout };
 })();

@@ -29,9 +29,8 @@ Este simulador ha sido diseñado para ofrecer una experiencia realista, desafian
 
 ## 🌐 Demo En Vivo
 
-Puedes acceder al simulador en: **[(https://cristianrioshdz.github.io/Sim_SaberPro/)]**
+Puedes acceder al simulador en: **[TU_URL_AQUÍ]**
 
 ---
 
 *Proyecto diseñado con fines educativos.*
-
