@@ -1,5 +1,6 @@
 /* ============================================================
    APP — Punto de entrada de la aplicación
+   Creado por: Cristian Rios (2026)
    Inicializa tema, renderer y vincula evento del toggle.
    ============================================================ */
 

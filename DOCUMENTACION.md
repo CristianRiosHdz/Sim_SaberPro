@@ -1,5 +1,7 @@
 # Documentación Técnica: Simulador Saber Pro 2026 🎓
 
+> **Proyecto creado y desarrollado por: Cristian Rios**
+
 Este documento explica la arquitectura, el funcionamiento del motor de cuestionarios y la estructura de contenidos de la plataforma **Saber Pro Simulator**. El sistema ha sido diseñado bajo principios de **Separación de Responsabilidades (SoC)** y **Agnosticismo de Datos**, permitiendo una alta escalabilidad y facilidad de mantenimiento.
 
 ---
@@ -85,4 +87,4 @@ La interfaz utiliza un sistema de **Tokens de Diseño** (`tokens.css`) para mant
 - **Micro-animaciones**: Transiciones suaves al navegar entre preguntas para reducir la fatiga cognitiva.
 
 ---
-*Documentación generada por el Arquitecto de Sistemas Principal — Febrero 2026.*
+*Proyecto y Documentación creados por **Cristian Rios** — Arquitecto de Sistemas Principal — Febrero 2026.*
