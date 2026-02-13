@@ -9,7 +9,8 @@ const Renderer = (() => {
         'competencias-ciudadanas': () => COMPETENCIAS_CIUDADANAS_QUESTIONS,
         'comunicacion-escrita': () => COMUNICACION_ESCRITA_QUESTIONS,
         'ingles': () => INGLES_QUESTIONS,
-        'problematicas-psicologicas': () => PROBLEMATICAS_PSICOLOGICAS_QUESTIONS
+        'problematicas-psicologicas': () => PROBLEMATICAS_PSICOLOGICAS_QUESTIONS,
+        'cultura-general': () => CULTURA_GENERAL_QUESTIONS
     };
 
     let _timerInterval = null;

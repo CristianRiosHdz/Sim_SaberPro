@@ -63,6 +63,16 @@ const MODULES_CONFIG = [
         timeLimit: 60,
         questionCount: 25,
         color: '#DC2626'
+    },
+    {
+        id: 'cultura-general',
+        name: 'Cultura General',
+        description: 'Desafía tus conocimientos en historia universal, ciencia, arte, geografía y actualidad mundial. Un módulo esencial para un profesional integral.',
+        icon: '🌍',
+        passingScore: 70,
+        timeLimit: 30,
+        questionCount: 15,
+        color: '#F59E0B'
     }
 ];
 

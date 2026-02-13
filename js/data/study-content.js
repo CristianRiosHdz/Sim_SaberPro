@@ -264,5 +264,36 @@ const STUDY_CONTENT = {
                 `
             }
         ]
+    },
+    'cultura-general': {
+        title: 'Cultura General',
+        sections: [
+            {
+                subtitle: '1. ¿Qué es la Cultura General?',
+                content: `
+                    <p>No se trata de saberlo todo, sino de tener un mapa mental del mundo. Un profesional integral debe conectar su saber específico con el contexto global.</p>
+                    <div class="study-example">
+                        <h4>Áreas Principales</h4>
+                        <ul>
+                            <li><strong>Historia:</strong> Entender los hitos que formaron el presente (Revoluciones, Guerras Mundiales).</li>
+                            <li><strong>Ciencia:</strong> Principios básicos de física, química y biología que rigen la vida.</li>
+                            <li><strong>Geografía:</strong> Ubicación de países, océanos y recursos naturales.</li>
+                            <li><strong>Arte y Literatura:</strong> Las grandes obras que definen nuestra identidad humana.</li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                subtitle: '2. Cómo Mejorar tu Cultura General',
+                content: `
+                    <p>La curiosidad es tu mejor herramienta. Algunos consejos prácticos:</p>
+                    <ul>
+                        <li><strong>Lee noticias diariamente:</strong> Enfócate en secciones de ciencia, cultura y tecnología, no solo en política local.</li>
+                        <li><strong>Cuestiona lo cotidiano:</strong> Si ves un monumento o escuchas un nombre famoso, busca su historia brevemente.</li>
+                        <li><strong>Mapas interactivos:</strong> Jugar a ubicar países ayuda a entender geopolítica y economía.</li>
+                    </ul>
+                `
+            }
+        ]
     }
 };
