@@ -354,5 +354,145 @@ const CULTURA_GENERAL_QUESTIONS = [
         correctAnswer: 'c',
         explanation: 'Aunque tiene sedes importantes en Ginebra y Viena, la sede principal de la ONU está ubicada en Manhattan, Nueva York.',
         reference: 'Sitio Oficial de las Naciones Unidas.'
+    },
+    {
+        id: 'CG-026',
+        context: 'La tabla periódica es una herramienta fundamental para entender las propiedades de la materia y cómo interactúan los elementos.',
+        text: '¿Quién es considerado el principal creador de la tabla periódica de los elementos?',
+        options: [
+            { id: 'a', text: 'Antoine Lavoisier' },
+            { id: 'b', text: 'Dmitri Mendeléyev' },
+            { id: 'c', text: 'John Dalton' },
+            { id: 'd', text: 'Niels Bohr' }
+        ],
+        correctAnswer: 'b',
+        explanation: 'Dmitri Mendeléyev publicó en 1869 la primera tabla periódica ampliamente reconocida, dejando incluso espacios vacíos para elementos que aún no habían sido descubiertos.',
+        reference: 'Royal Society of Chemistry - History of Periodic Table.'
+    },
+    {
+        id: 'CG-027',
+        context: 'El fin de la Guerra Fría estuvo marcado por la caída de símbolos físicos e ideológicos que dividían a Europa.',
+        text: '¿En qué año cayó el Muro de Berlín?',
+        options: [
+            { id: 'a', text: '1985' },
+            { id: 'b', text: '1989' },
+            { id: 'c', text: '1991' },
+            { id: 'd', text: '2000' }
+        ],
+        correctAnswer: 'b',
+        explanation: 'El Muro de Berlín cayó la noche del 9 de noviembre de 1989, simbolizando el colapso de los regímenes comunistas en Europa del Este y el fin de la división alemana.',
+        reference: 'Deutsche Welle - Historia de la Unificación Alemana.'
+    },
+    {
+        id: 'CG-028',
+        context: 'El Nilo y el Amazonas han competido históricamente por el título del río más largo del mundo según diferentes metodologías de medición.',
+        text: 'Según estudios geográficos recientes, ¿cuál es el río más largo y caudaloso del mundo?',
+        options: [
+            { id: 'a', text: 'Río Nilo' },
+            { id: 'b', text: 'Río Amazonas' },
+            { id: 'c', text: 'Río Misisipi' },
+            { id: 'd', text: 'Río Yangtsé' }
+        ],
+        correctAnswer: 'b',
+        explanation: 'Aunque tradicionalmente se consideraba al Nilo como el más largo, expediciones científicas recientes han determinado que el Amazonas es el más largo (aprox. 7,062 km) y, sin duda, el más caudaloso.',
+        reference: 'National Geographic - Rivers of the World.'
+    },
+    {
+        id: 'CG-029',
+        context: 'El arte mexicano del siglo XX es mundialmente reconocido por su fuerza política y la exploración de la identidad nacional.',
+        text: '¿Qué artista mexicana es famosa por sus autorretratos y su obra vinculada al surrealismo y el dolor físico?',
+        options: [
+            { id: 'a', text: 'Remedios Varo' },
+            { id: 'b', text: 'Frida Kahlo' },
+            { id: 'c', text: 'Leonora Carrington' },
+            { id: 'd', text: 'Gabriela Mistral' }
+        ],
+        correctAnswer: 'b',
+        explanation: 'Frida Kahlo es un ícono del arte mundial. Su obra gira en torno a su biografía, sus raíces mexicanas y su lucha tras un grave accidente que marcó su vida.',
+        reference: 'Museo Frida Kahlo - Casa Azul.'
+    },
+    {
+        id: 'CG-030',
+        context: 'La filosofía moderna introdujo la duda metódica como una forma de alcanzar el conocimiento verdadero.',
+        text: '¿Qué filósofo francés acuñó la famosa frase "Pienso, luego existo" (Cogito, ergo sum)?',
+        options: [
+            { id: 'a', text: 'Jean-Jacques Rousseau' },
+            { id: 'b', text: 'René Descartes' },
+            { id: 'c', text: 'Blaise Pascal' },
+            { id: 'd', text: 'Voltaire' }
+        ],
+        correctAnswer: 'b',
+        explanation: 'Descartes, en su "Discurso del Método" (1637), establece que la única certeza de la que no se puede dudar es de la propia existencia como ser pensante.',
+        reference: 'Stanford Encyclopedia of Philosophy.'
+    },
+    {
+        id: 'CG-031',
+        context: 'La música popular del siglo XX cambió para siempre con la "invasión británica" liderada por grupos de Liverpool.',
+        text: '¿Cuál de los siguientes músicos NO era miembro del grupo "The Beatles"?',
+        options: [
+            { id: 'a', text: 'John Lennon' },
+            { id: 'b', text: 'Mick Jagger' },
+            { id: 'c', text: 'Paul McCartney' },
+            { id: 'd', text: 'George Harrison' }
+        ],
+        correctAnswer: 'b',
+        explanation: 'The Beatles estaba formado por John Lennon, Paul McCartney, George Harrison y Ringo Starr. Mick Jagger es el vocalista de The Rolling Stones.',
+        reference: 'Rock & Roll Hall of Fame.'
+    },
+    {
+        id: 'CG-032',
+        context: 'La historia de la comunicación humana dio un salto gigante con la invención de dispositivos para transmitir la voz a distancia.',
+        text: '¿A quién se le reconoce oficialmente hoy como el inventor del teléfono, tras una resolución del Congreso de EE.UU. en 2002?',
+        options: [
+            { id: 'a', text: 'Alexander Graham Bell' },
+            { id: 'b', text: 'Antonio Meucci' },
+            { id: 'c', text: 'Thomas Edison' },
+            { id: 'd', text: 'Nikola Tesla' }
+        ],
+        correctAnswer: 'b',
+        explanation: 'Aunque Graham Bell patentó el teléfono primero, en 2002 se reconoció oficialmente que el italiano Antonio Meucci fue quien lo inventó originalmente (el teletrófono).',
+        reference: 'Library of Congress - Science & Technology.'
+    },
+    {
+        id: 'CG-033',
+        context: 'La exploración espacial alcanzó su punto más alto en el siglo XX con la llegada del ser humano a la Luna.',
+        text: '¿Quién fue el primer hombre en caminar sobre la superficie lunar en 1969?',
+        options: [
+            { id: 'a', text: 'Buzz Aldrin' },
+            { id: 'b', text: 'Neil Armstrong' },
+            { id: 'c', text: 'Michael Collins' },
+            { id: 'd', text: 'Alan Shepard' }
+        ],
+        correctAnswer: 'b',
+        explanation: 'Neil Armstrong fue el comandante de la misión Apolo 11 y el primer ser humano en pisar la Luna el 20 de julio de 1969.',
+        reference: 'NASA - Apollo 11 Mission Archive.'
+    },
+    {
+        id: 'CG-034',
+        context: 'Los Juegos Olímpicos modernos se inspiraron en las competiciones de la antigua Grecia para promover la paz y la cultura física.',
+        text: '¿En qué ciudad se celebraron los primeros Juegos Olímpicos de la era moderna en 1896?',
+        options: [
+            { id: 'a', text: 'París' },
+            { id: 'b', text: 'Atenas' },
+            { id: 'c', text: 'Roma' },
+            { id: 'd', text: 'Londres' }
+        ],
+        correctAnswer: 'b',
+        explanation: 'En homenaje a sus orígenes antiguos, los primeros juegos modernos organizados por el Barón de Coubertin se llevaron a cabo en Atenas, Grecia.',
+        reference: 'International Olympic Committee (IOC) History.'
+    },
+    {
+        id: 'CG-035',
+        context: 'El descubrimiento de la estructura del ADN permitió entender cómo se transmite la información genética entre generaciones.',
+        text: '¿Qué forma tiene la estructura de la molécula de ADN descubierta por Watson, Crick y Franklin?',
+        options: [
+            { id: 'a', text: 'Círculo cerrado' },
+            { id: 'b', text: 'Doble hélice' },
+            { id: 'c', text: 'Triple cadena' },
+            { id: 'd', text: 'Red neuronal' }
+        ],
+        correctAnswer: 'b',
+        explanation: 'La molécula de ADN tiene forma de doble hélice, similar a una escalera de caracol, donde los peldaños son las bases nitrogenadas.',
+        reference: 'National Human Genome Research Institute.'
     }
 ];
