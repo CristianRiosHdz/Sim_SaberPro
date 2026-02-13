@@ -1151,3 +1151,6 @@
 .pdf-item .resource-icon { color: #ef4444; }
 .video-item .resource-icon { color: #ff0000; }
 
+
+.academic-item .resource-icon { color: #3b82f6; }
+.resource-item.academic-item:hover { border-color: #3b82f6; }

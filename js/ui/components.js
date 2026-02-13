@@ -310,6 +310,16 @@ const Components = (() => {
             </a>
         `).join('');
 
+      const academicHtml = (resources.academic || []).map(item => `
+            <a href="${item.url}" target="_blank" class="resource-item academic-item">
+                <span class="resource-icon">🎓</span>
+                <div class="resource-info">
+                    <span class="resource-name">${escapeHtml(item.name)}</span>
+                    <span class="resource-type">Recurso Académico / Blog</span>
+                </div>
+            </a>
+        `).join('');
+
       const videosHtml = (resources.videos || []).map(vid => `
             <a href="https://www.youtube.com/watch?v=${vid.id}" target="_blank" class="resource-item video-item">
                 <span class="resource-icon">🎬</span>
@@ -324,6 +334,7 @@ const Components = (() => {
             <div class="study-resources-section">
                 <h3 class="study-section-title">🔗 Material Complementario</h3>
                 <div class="study-resources-grid">
+                    ${academicHtml}
                     ${pdfsHtml}
                     ${videosHtml}
                 </div>
