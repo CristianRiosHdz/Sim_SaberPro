@@ -33,12 +33,12 @@ const STUDY_CONTENT = {
         ],
         resources: {
             pdfs: [
-                { name: 'Guía de Orientación - Lectura Crítica (ICFES)', url: 'https://www.icfes.gov.co/documents/39242/1321592/Guia+de+orientacion+modulo+lectura+critica-saber-pro.pdf' },
-                { name: 'Cuadernillo de Ejemplos de Preguntas', url: 'https://www.icfes.gov.co/documents/39242/1321592/Cuadernillo+de+preguntas+Lectura+Critica+Saber+Pro.pdf' }
+                { name: 'Portal Oficial de Guías ICFES', url: 'https://www.icfes.gov.co/guias-de-orientacion' },
+                { name: 'Buscar Guía Lectura Crítica (Google)', url: 'https://www.google.com/search?q=site:icfes.gov.co+Guia+de+orientacion+Lectura+Critica+Saber+Pro+pdf' }
             ],
             videos: [
-                { title: 'Cómo mejorar en Lectura Crítica', id: 'mD2C7AEvOaw' },
-                { title: 'Análisis de textos discontinuos (Caricaturas)', id: 'vA6qL-3w6X8' }
+                { title: 'Filadd: Preparación Lectura Crítica', id: 'S_E3LToP_vI' },
+                { title: 'Taller de Lectura - Martha Carrillo', id: 'mD2C7AEvOaw' }
             ]
         }
     },
@@ -55,22 +55,16 @@ const STUDY_CONTENT = {
                         <li><strong>Circulares:</strong> Proporciones (siempre suman 100%).</li>
                     </ul>
                 `
-            },
-            {
-                subtitle: '2. Probabilidad y Estadística',
-                content: `
-                    <p>Media, mediana, moda y probabilidad básica son los pilares de este módulo.</p>
-                `
             }
         ],
         resources: {
             pdfs: [
-                { name: 'Guía de Orientación - Razonamiento Cuantitativo', url: 'https://www.icfes.gov.co/documents/39242/1321592/Guia+de+orientacion+modulo+razonamiento+cuantitativo-saber-pro.pdf' },
-                { name: 'Ejemplos de Preguntas Explicadas', url: 'https://www.icfes.gov.co/documents/39242/1321592/Cuadernillo+de+preguntas+Razonamiento+Cuantitativo+Saber+Pro.pdf' }
+                { name: 'Repositorio de Guías Saber Pro', url: 'https://www.icfes.gov.co/guias-de-orientacion' },
+                { name: 'Buscar Guía Razonamiento (Google)', url: 'https://www.google.com/search?q=site:icfes.gov.co+Guia+de+orientacion+Razonamiento+Cuantitativo+Saber+Pro+pdf' }
             ],
             videos: [
                 { title: 'Razonamiento Cuantitativo desde Cero', id: 'qS_2v_15X88' },
-                { title: 'Resolución de problemas de regla de 3 y porcentajes', id: '4F9M7JvR1_4' }
+                { title: 'Clase Magistral de Matemáticas', id: '4F9M7JvR1_4' }
             ]
         }
     },
@@ -82,22 +76,16 @@ const STUDY_CONTENT = {
                 content: `
                     <p>Conocer los fundamentos del Estado Social de Derecho y las ramas del poder público.</p>
                 `
-            },
-            {
-                subtitle: '2. Multiperspectivismo',
-                content: `
-                    <p>Capacidad de analizar conflictos desde los intereses de diferentes actores sociales.</p>
-                `
             }
         ],
         resources: {
             pdfs: [
-                { name: 'Guía de Orientación - Competencias Ciudadanas', url: 'https://www.icfes.gov.co/documents/39242/1321592/Guia+de+orientacion+modulo+competencias+ciudadanas-saber-pro.pdf' },
-                { name: 'Constitución Política de Colombia (PDF)', url: 'https://www.corteconstitucional.gov.co/inicio/Constitucion%20politica%20de%20Colombia.pdf' }
+                { name: 'Guías de Orientación ICFES', url: 'https://www.icfes.gov.co/guias-de-orientacion' },
+                { name: 'Constitución Política (Corte)', url: 'https://www.corteconstitucional.gov.co/inicio/Constitucion%20politica%20de%20Colombia.pdf' }
             ],
             videos: [
-                { title: 'Resumen Constitución Política de Colombia', id: 'N_f78nIiv6Y' },
-                { title: 'Multiperspectivismo y Pensamiento Sistémico', id: '85VbX9Yy0_w' }
+                { title: 'Competencias Ciudadanas - Filadd', id: '85VbX9Yy0_w' },
+                { title: 'Estructura del Estado Colombiano', id: 'N_f78nIiv6Y' }
             ]
         }
     },
@@ -113,12 +101,12 @@ const STUDY_CONTENT = {
         ],
         resources: {
             pdfs: [
-                { name: 'Guía de Orientación - Comunicación Escrita', url: 'https://www.icfes.gov.co/documents/39242/1321592/Guia+de+orientacion+modulo+comunicacion+escrita-saber-pro.pdf' },
-                { name: 'Rúbrica de Calificación de Ensayos', url: 'https://www.icfes.gov.co/documents/39242/1321592/Rubrica+de+calificacion+Comunicacion+Escrita.pdf' }
+                { name: 'Guía Comunicación Escrita ICFES', url: 'https://www.icfes.gov.co/guias-de-orientacion' },
+                { name: 'Buscar Rúbrica de Calificación (Google)', url: 'https://www.google.com/search?q=site:icfes.gov.co+Rubrica+Calificacion+Comunicacion+Escrita+Saber+Pro+pdf' }
             ],
             videos: [
-                { title: 'Cómo escribir un ensayo argumentativo', id: '6pM6mI-Hq0Y' },
-                { title: 'Tips para Comunicación Escrita Saber Pro', id: '5E2S_6o-yH8' }
+                { title: 'Cómo escribir el ensayo perfecto', id: '5E2S_6o-yH8' },
+                { title: 'Clase de Escritura Argumentativa', id: '6pM6mI-Hq0Y' }
             ]
         }
     },
@@ -134,12 +122,12 @@ const STUDY_CONTENT = {
         ],
         resources: {
             pdfs: [
-                { name: 'Guía de Orientación - Inglés Saber Pro', url: 'https://www.icfes.gov.co/documents/39242/1321592/Guia+de+orientacion+modulo+ingles-saber-pro.pdf' },
-                { name: 'Vocabulario Esencial por Niveles', url: 'https://www.icfes.gov.co/documents/39242/1321592/Listado+de+vocabulario+Ingles.pdf' }
+                { name: 'Guía de Componente Inglés', url: 'https://www.icfes.gov.co/guias-de-orientacion' },
+                { name: 'Simulacro Inglés ICFES (Search)', url: 'https://www.google.com/search?q=site:icfes.gov.co+Simulacro+Ingles+Saber+Pro+pdf' }
             ],
             videos: [
-                { title: 'Estrategias para el componente de Inglés', id: '7o_H9-87X6Q' },
-                { title: 'Simulacro de Inglés Explicado', id: 'v_XqGj6_Q-E' }
+                { title: 'Estrategias Inglés Saber Pro', id: '7o_H9-87X6Q' },
+                { title: 'Repaso Inglés B1/B2', id: 'v_XqGj6_Q-E' }
             ]
         }
     },
@@ -155,12 +143,12 @@ const STUDY_CONTENT = {
         ],
         resources: {
             pdfs: [
-                { name: 'Módulo de Análisis de Problemáticas Psicológicas', url: 'https://www.icfes.gov.co/documents/39242/1321592/Guia+de+orientacion+analisis+problematicas+psicologicas.pdf' },
-                { name: 'Código Ético y Deontológico del Psicólogo', url: 'https://www.uniremington.edu.co/wp-content/uploads/2021/08/Ley-1090-de-2006.pdf' }
+                { name: 'Módulos Específicos ICFES', url: 'https://www.icfes.gov.co/guias-de-orientacion' },
+                { name: 'Ley 1090 de 2006 (Colpsic)', url: 'https://www.colpsic.org.co/wp-content/uploads/2021/04/Ley-1090-de-2006-actualizada.pdf' }
             ],
             videos: [
-                { title: 'Ley 1090 de 2006 explicada', id: '9X-w8G_1Xq8' },
-                { title: 'Enfoques Psicológicos para el Saber Pro', id: '3G9Y8t6_7-k' }
+                { title: 'Análisis de Casos Psicológicos', id: '9X-w8G_1Xq8' },
+                { title: 'Ética del Psicólogo en Colombia', id: '3G9Y8t6_7-k' }
             ]
         }
     }
