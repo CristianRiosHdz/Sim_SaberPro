@@ -297,6 +297,40 @@ const Components = (() => {
             </section>
         `).join('');
 
+    const resources = content.resources;
+    let resourcesHtml = '';
+    if (resources) {
+      const pdfsHtml = (resources.pdfs || []).map(pdf => `
+            <a href="${pdf.url}" target="_blank" class="resource-item pdf-item">
+                <span class="resource-icon">📄</span>
+                <div class="resource-info">
+                    <span class="resource-name">${escapeHtml(pdf.name)}</span>
+                    <span class="resource-type">Guía PDF Oficial</span>
+                </div>
+            </a>
+        `).join('');
+
+      const videosHtml = (resources.videos || []).map(vid => `
+            <a href="https://www.youtube.com/watch?v=${vid.id}" target="_blank" class="resource-item video-item">
+                <span class="resource-icon">🎬</span>
+                <div class="resource-info">
+                    <span class="resource-name">${escapeHtml(vid.title)}</span>
+                    <span class="resource-type">Video de Apoyo</span>
+                </div>
+            </a>
+        `).join('');
+
+      resourcesHtml = `
+            <div class="study-resources-section">
+                <h3 class="study-section-title">🔗 Material Complementario</h3>
+                <div class="study-resources-grid">
+                    ${pdfsHtml}
+                    ${videosHtml}
+                </div>
+            </div>
+        `;
+    }
+
     return `
             <div class="study-container slide-up">
                 <div class="page-header">
@@ -322,6 +356,7 @@ const Components = (() => {
                         </div>
                         <div class="study-body">
                             ${sectionsHtml}
+                            ${resourcesHtml}
                         </div>
                         <div class="study-footer">
                             <button class="btn btn-primary" id="btn-start-quiz-from-study" data-module-id="${activeModule.id}"> Practicar este módulo ▶️</button>

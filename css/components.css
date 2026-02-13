@@ -1092,3 +1092,62 @@
     font-weight: var(--font-bold);
 }
 
+
+/*  Study Resources  */
+.study-resources-section {
+    margin-top: var(--spacing-8);
+    padding-top: var(--spacing-6);
+    border-top: 1px solid var(--color-border);
+}
+
+.study-resources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--spacing-4);
+    margin-top: var(--spacing-4);
+}
+
+.resource-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-4);
+    padding: var(--spacing-4);
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    transition: all var(--transition-base);
+}
+
+.resource-item:hover {
+    border-color: var(--color-primary);
+    background: var(--color-surface);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+.resource-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.resource-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.resource-name {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-bold);
+    color: var(--color-text);
+}
+
+.resource-type {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+}
+
+.pdf-item .resource-icon { color: #ef4444; }
+.video-item .resource-icon { color: #ff0000; }
+
