@@ -214,5 +214,145 @@ const CULTURA_GENERAL_QUESTIONS = [
         correctAnswer: 'b',
         explanation: 'La selva amazónica se extiende por nueve países de Sudamérica, siendo Brasil y Perú los que poseen la mayor parte de su territorio.',
         reference: 'National Geographic - Amazon Rainforest.'
+    },
+    {
+        id: 'CG-016',
+        context: 'La literatura española del Siglo de Oro produjo la que es considerada por muchos como la primera novela moderna de la historia.',
+        text: '¿Quién es el autor de "El ingenioso hidalgo Don Quijote de la Mancha"?',
+        options: [
+            { id: 'a', text: 'Lope de Vega' },
+            { id: 'b', text: 'Miguel de Cervantes Saavedra' },
+            { id: 'c', text: 'Francisco de Quevedo' },
+            { id: 'd', text: 'Federico García Lorca' }
+        ],
+        correctAnswer: 'b',
+        explanation: 'Miguel de Cervantes Saavedra publicó la primera parte del Quijote en 1605, revolucionando la narrativa universal mediante el uso de la polifonía y la metaficción.',
+        reference: 'Biblioteca Virtual Miguel de Cervantes.'
+    },
+    {
+        id: 'CG-017',
+        context: 'La mitología griega ha influido profundamente en el arte, la psicología y la terminología científica occidental.',
+        text: '¿Quién era el dios del inframundo en la mitología griega?',
+        options: [
+            { id: 'a', text: 'Zeus' },
+            { id: 'b', text: 'Poseidón' },
+            { id: 'c', text: 'Hades' },
+            { id: 'd', text: 'Ares' }
+        ],
+        correctAnswer: 'c',
+        explanation: 'Hades es el hermano de Zeus y Poseidón, y le correspondió el gobierno del mundo subterráneo o inframundo. Zeus gobierna el cielo y Poseidón los mares.',
+        reference: 'Manual de Mitología Griega - Ed. Gredos.'
+    },
+    {
+        id: 'CG-018',
+        context: 'El agua es una molécula esencial para la vida tal como la conocemos, con propiedades químicas únicas debido a sus puentes de hidrógeno.',
+        text: '¿Cuál es la fórmula química del agua?',
+        options: [
+            { id: 'a', text: 'CO2' },
+            { id: 'b', text: 'NaCl' },
+            { id: 'c', text: 'H2O' },
+            { id: 'd', text: 'O2' }
+        ],
+        correctAnswer: 'c',
+        explanation: 'La molécula de agua está compuesta por dos átomos de hidrógeno unidos covalentemente a un átomo de oxígeno (H2O).',
+        reference: 'Química General - Raymond Chang.'
+    },
+    {
+        id: 'CG-019',
+        context: 'La geografía física estudia las grandes formaciones de la Tierra, incluyendo sus montañas y sistemas fluviales.',
+        text: '¿Cuál es la montaña más alta del mundo sobre el nivel del mar?',
+        options: [
+            { id: 'a', text: 'K2' },
+            { id: 'b', text: 'Monte Everest' },
+            { id: 'c', text: 'Kilimanjaro' },
+            { id: 'd', text: 'Aconcagua' }
+        ],
+        correctAnswer: 'b',
+        explanation: 'El Monte Everest, ubicado en la cordillera del Himalaya (frontera entre Nepal y China), tiene una altitud de 8,848 metros sobre el nivel del mar.',
+        reference: 'National Geographic - Geography Facts.'
+    },
+    {
+        id: 'CG-020',
+        context: 'La historia de la independencia de las naciones americanas estuvo liderada por figuras militares y políticas clave durante el siglo XIX.',
+        text: '¿Quién es conocido como "El Libertador" de cinco naciones sudamericanas (Venezuela, Colombia, Ecuador, Perú y Bolivia)?',
+        options: [
+            { id: 'a', text: 'José de San Martín' },
+            { id: 'b', text: 'Bernardo O\'Higgins' },
+            { id: 'c', text: 'Simón Bolívar' },
+            { id: 'd', text: 'Antonio Nariño' }
+        ],
+        correctAnswer: 'c',
+        explanation: 'Simón Bolívar fue el principal líder militar y político de las guerras de independencia contra la corona española en el norte de Sudamérica.',
+        reference: 'Biografía de Simón Bolívar - Archivo Histórico.'
+    },
+    {
+        id: 'CG-021',
+        context: 'La fotosíntesis es el proceso biológico mediante el cual las plantas convierten la energía solar en energía química.',
+        text: '¿Qué gas absorben las plantas de la atmósfera para realizar la fotosíntesis?',
+        options: [
+            { id: 'a', text: 'Oxígeno' },
+            { id: 'b', text: 'Nitrógeno' },
+            { id: 'c', text: 'Dióxido de Carbono (CO2)' },
+            { id: 'd', text: 'Argón' }
+        ],
+        correctAnswer: 'c',
+        explanation: 'Las plantas absorben CO2 y agua, y utilizando la energía de la luz, producen glucosa y liberan oxígeno como subproducto.',
+        reference: 'Biología de Campbell.'
+    },
+    {
+        id: 'CG-022',
+        context: 'El arte moderno rompió con las reglas de la perspectiva tradicional para explorar nuevas formas de expresión visual.',
+        text: '¿Qué artista es famoso por co-fundar el movimiento cubista y pintar "Guernica"?',
+        options: [
+            { id: 'a', text: 'Salvador Dalí' },
+            { id: 'b', text: 'Vincent van Gogh' },
+            { id: 'c', text: 'Pablo Picasso' },
+            { id: 'd', text: 'Claude Monet' }
+        ],
+        correctAnswer: 'c',
+        explanation: 'Pablo Picasso fue un artista español extremadamente versátil, cuya obra "Guernica" es un poderoso alegato contra los horrores de la guerra.',
+        reference: 'Museo Reina Sofía - Archivos de Arte.'
+    },
+    {
+        id: 'CG-023',
+        context: 'La Revolución Francesa de 1789 cambió el curso de la historia política al introducir conceptos de ciudadanía y derechos universales.',
+        text: '¿Cuál era el lema de la Revolución Francesa?',
+        options: [
+            { id: 'a', text: 'Orden y Progreso' },
+            { id: 'b', text: 'Libertad, Igualdad, Fraternidad' },
+            { id: 'c', text: 'Paz, Pan y Tierra' },
+            { id: 'd', text: 'Dios, Patria y Familia' }
+        ],
+        correctAnswer: 'b',
+        explanation: '"Liberté, Égalité, Fraternité" se convirtió en el lema oficial de la República Francesa y un símbolo de los valores democráticos modernos.',
+        reference: 'Historia Universal - Ed. Santillana.'
+    },
+    {
+        id: 'CG-024',
+        context: 'La invención del World Wide Web (WWW) permitió la explosión del uso de Internet en todo el mundo a principios de los años 90.',
+        text: '¿Quién inventó el World Wide Web mientras trabajaba en el CERN?',
+        options: [
+            { id: 'a', text: 'Steve Jobs' },
+            { id: 'b', text: 'Tim Berners-Lee' },
+            { id: 'c', text: 'Mark Zuckerberg' },
+            { id: 'd', text: 'Linus Torvalds' }
+        ],
+        correctAnswer: 'b',
+        explanation: 'Sir Tim Berners-Lee inventó el sistema de hipertexto que sustenta la web moderna en 1989, buscando una forma eficiente de compartir información entre científicos.',
+        reference: 'CERN - International History of Web.'
+    },
+    {
+        id: 'CG-025',
+        context: 'Las Naciones Unidas (ONU) fueron creadas tras la Segunda Guerra Mundial para prevenir futuros conflictos globales.',
+        text: '¿Dónde se encuentra la sede principal de las Naciones Unidas?',
+        options: [
+            { id: 'a', text: 'Ginebra, Suiza' },
+            { id: 'b', text: 'Bruselas, Bélgica' },
+            { id: 'c', text: 'Nueva York, EE. UU.' },
+            { id: 'd', text: 'Viena, Austria' }
+        ],
+        correctAnswer: 'c',
+        explanation: 'Aunque tiene sedes importantes en Ginebra y Viena, la sede principal de la ONU está ubicada en Manhattan, Nueva York.',
+        reference: 'Sitio Oficial de las Naciones Unidas.'
     }
 ];

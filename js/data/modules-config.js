@@ -70,8 +70,8 @@ const MODULES_CONFIG = [
         description: 'Desafía tus conocimientos en historia universal, ciencia, arte, geografía y actualidad mundial. Un módulo esencial para un profesional integral.',
         icon: '🌍',
         passingScore: 70,
-        timeLimit: 30,
-        questionCount: 15,
+        timeLimit: 60,
+        questionCount: 25,
         color: '#F59E0B'
     }
 ];
