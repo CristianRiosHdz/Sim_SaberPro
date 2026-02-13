@@ -19,6 +19,7 @@ Este simulador ha sido diseñado para ofrecer una experiencia realista, desafian
   - **Modo Libre:** Practica en cualquier módulo en cualquier momento.
 - **Retroalimentación Inmediata:** Explicaciones detalladas para cada respuesta (correcta o incorrecta).
 - **Simulación Realista:** Temporizadores ajustados según la complejidad de cada módulo.
+- **Biblioteca de Estudio:** Contenido teórico detallado, ejemplos prácticos y tips de expertos para cada área.
 - **Diseño Premium:** Interfaz moderna, rápida y totalmente responsiva.
 
 ## 🛠️ Tecnologías Utilizadas
@@ -29,7 +30,7 @@ Este simulador ha sido diseñado para ofrecer una experiencia realista, desafian
 
 ## 🌐 Demo En Vivo
 
-Puedes acceder al simulador en: **[TU_URL_AQUÍ]**
+Puedes acceder al simulador en: **[Saber Pro Simulator — Demo](https://cristianrioshdz.github.io/Sim_SaberPro/)**
 
 ---
 
