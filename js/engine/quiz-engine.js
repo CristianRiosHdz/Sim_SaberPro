@@ -3,9 +3,11 @@
    Maneja selección de preguntas, barajado, puntaje y timer.
    ============================================================ */
 
-const QuizEngine = (() => {
+import { pickRandom, shuffleArray, calculatePercentage } from '../utils/helpers.js';
+
+export const QuizEngine = {
     /* ── Estado interno del quiz activo ── */
-    let _currentQuiz = null;
+    _currentQuiz: null,
 
     /**
      * Inicia un nuevo quiz para un módulo específico.
@@ -14,7 +16,7 @@ const QuizEngine = (() => {
      * @param {Array} questionBank - Banco completo de preguntas del módulo
      * @returns {Object} Estado del quiz inicializado
      */
-    function startQuiz(moduleConfig, questionBank) {
+    startQuiz(moduleConfig, questionBank) {
         const questionCount = Math.min(moduleConfig.questionCount, questionBank.length);
         const selectedQuestions = pickRandom(questionBank, questionCount);
 
@@ -24,7 +26,7 @@ const QuizEngine = (() => {
             options: shuffleArray(question.options)
         }));
 
-        _currentQuiz = {
+        this._currentQuiz = {
             moduleId: moduleConfig.id,
             moduleName: moduleConfig.name,
             passingScore: moduleConfig.passingScore,
@@ -36,43 +38,43 @@ const QuizEngine = (() => {
             isFinished: false
         };
 
-        return getQuizState();
-    }
+        return this.getQuizState();
+    },
 
     /**
      * Obtiene el estado público del quiz actual (sin exponer internos).
      * @returns {Object|null}
      */
-    function getQuizState() {
-        if (!_currentQuiz) return null;
+    getQuizState() {
+        if (!this._currentQuiz) return null;
 
         return {
-            moduleId: _currentQuiz.moduleId,
-            moduleName: _currentQuiz.moduleName,
-            currentQuestion: _currentQuiz.questions[_currentQuiz.currentIndex] || null,
-            currentIndex: _currentQuiz.currentIndex,
-            totalQuestions: _currentQuiz.questions.length,
-            answeredCount: _currentQuiz.answers.length,
-            timeLimit: _currentQuiz.timeLimit,
-            elapsedSeconds: Math.floor((Date.now() - _currentQuiz.startTime) / 1000),
-            remainingSeconds: _getRemainingSeconds(),
-            isFinished: _currentQuiz.isFinished,
-            isLastQuestion: _currentQuiz.currentIndex >= _currentQuiz.questions.length - 1
+            moduleId: this._currentQuiz.moduleId,
+            moduleName: this._currentQuiz.moduleName,
+            currentQuestion: this._currentQuiz.questions[this._currentQuiz.currentIndex] || null,
+            currentIndex: this._currentQuiz.currentIndex,
+            totalQuestions: this._currentQuiz.questions.length,
+            answeredCount: this._currentQuiz.answers.length,
+            timeLimit: this._currentQuiz.timeLimit,
+            elapsedSeconds: Math.floor((Date.now() - this._currentQuiz.startTime) / 1000),
+            remainingSeconds: this._getRemainingSeconds(),
+            isFinished: this._currentQuiz.isFinished,
+            isLastQuestion: this._currentQuiz.currentIndex >= this._currentQuiz.questions.length - 1
         };
-    }
+    },
 
     /**
      * Registra la respuesta del usuario para la pregunta actual.
      * @param {string} selectedOptionId - ID de la opción seleccionada
      * @returns {Object} - { isCorrect, correctAnswer, explanation }
      */
-    function submitAnswer(selectedOptionId) {
-        if (!_currentQuiz || _currentQuiz.isFinished) return null;
+    submitAnswer(selectedOptionId) {
+        if (!this._currentQuiz || this._currentQuiz.isFinished) return null;
 
-        const question = _currentQuiz.questions[_currentQuiz.currentIndex];
+        const question = this._currentQuiz.questions[this._currentQuiz.currentIndex];
         const isCorrect = question.correctAnswer === selectedOptionId;
 
-        _currentQuiz.answers.push({
+        this._currentQuiz.answers.push({
             questionId: question.id,
             selectedOptionId,
             correctOptionId: question.correctAnswer,
@@ -84,101 +86,90 @@ const QuizEngine = (() => {
             correctAnswer: question.correctAnswer,
             explanation: question.explanation || 'Sin explicación disponible.'
         };
-    }
+    },
 
     /**
      * Avanza a la siguiente pregunta.
      * @returns {Object|null} - Nuevo estado del quiz, o null si era la última
      */
-    function nextQuestion() {
-        if (!_currentQuiz || _currentQuiz.isFinished) return null;
+    nextQuestion() {
+        if (!this._currentQuiz || this._currentQuiz.isFinished) return null;
 
-        if (_currentQuiz.currentIndex < _currentQuiz.questions.length - 1) {
-            _currentQuiz.currentIndex++;
-            return getQuizState();
+        if (this._currentQuiz.currentIndex < this._currentQuiz.questions.length - 1) {
+            this._currentQuiz.currentIndex++;
+            return this.getQuizState();
         }
 
         return null;
-    }
+    },
 
     /**
      * Finaliza el quiz y calcula el resultado.
      * @returns {Object} Resultado final del quiz
      */
-    function finishQuiz() {
-        if (!_currentQuiz) return null;
+    finishQuiz() {
+        if (!this._currentQuiz) return null;
 
-        _currentQuiz.isFinished = true;
+        this._currentQuiz.isFinished = true;
 
-        const correctAnswers = _currentQuiz.answers.filter(a => a.isCorrect).length;
-        const totalQuestions = _currentQuiz.questions.length;
+        const correctAnswers = this._currentQuiz.answers.filter(a => a.isCorrect).length;
+        const totalQuestions = this._currentQuiz.questions.length;
         const score = calculatePercentage(correctAnswers, totalQuestions);
-        const passed = score >= _currentQuiz.passingScore;
-        const timeTaken = Math.floor((Date.now() - _currentQuiz.startTime) / 1000);
+        // Aunque no lo usemos directamente para persistencia, se mantiene por compatibilidad UI
+        const passed = score >= this._currentQuiz.passingScore;
+        const timeTaken = Math.floor((Date.now() - this._currentQuiz.startTime) / 1000);
 
         const result = {
-            moduleId: _currentQuiz.moduleId,
-            moduleName: _currentQuiz.moduleName,
+            moduleId: this._currentQuiz.moduleId,
+            moduleName: this._currentQuiz.moduleName,
             score,
             totalQuestions,
             correctAnswers,
             incorrectAnswers: totalQuestions - correctAnswers,
             passed,
-            passingScore: _currentQuiz.passingScore,
+            passingScore: this._currentQuiz.passingScore,
             timeTaken,
-            answers: _currentQuiz.answers,
+            answers: this._currentQuiz.answers,
             finishedAt: new Date().toISOString()
         };
 
         return result;
-    }
+    },
 
     /**
      * Calcula los segundos restantes del timer.
      * @returns {number|null} Segundos restantes, null si no hay límite
      * @private
      */
-    function _getRemainingSeconds() {
-        if (!_currentQuiz || !_currentQuiz.timeLimit) return null;
+    _getRemainingSeconds() {
+        if (!this._currentQuiz || !this._currentQuiz.timeLimit) return null;
 
-        const elapsed = Math.floor((Date.now() - _currentQuiz.startTime) / 1000);
-        return Math.max(0, _currentQuiz.timeLimit - elapsed);
-    }
+        const elapsed = Math.floor((Date.now() - this._currentQuiz.startTime) / 1000);
+        return Math.max(0, this._currentQuiz.timeLimit - elapsed);
+    },
 
     /**
      * Verifica si el tiempo se ha agotado.
      * @returns {boolean}
      */
-    function isTimeUp() {
-        if (!_currentQuiz || !_currentQuiz.timeLimit) return false;
-        return _getRemainingSeconds() <= 0;
-    }
+    isTimeUp() {
+        if (!this._currentQuiz || !this._currentQuiz.timeLimit) return false;
+        return this._getRemainingSeconds() <= 0;
+    },
 
     /**
      * Limpia el quiz activo sin generar resultado.
      */
-    function clearQuiz() {
-        _currentQuiz = null;
-    }
+    clearQuiz() {
+        this._currentQuiz = null;
+    },
 
     /**
      * Verifica si la pregunta actual ya fue respondida.
      * @returns {boolean}
      */
-    function isCurrentAnswered() {
-        if (!_currentQuiz) return false;
-        return _currentQuiz.answers.length > _currentQuiz.currentIndex;
+    isCurrentAnswered() {
+        if (!this._currentQuiz) return false;
+        return this._currentQuiz.answers.length > this._currentQuiz.currentIndex;
     }
-
-    // API pública
-    return {
-        startQuiz,
-        getQuizState,
-        submitAnswer,
-        nextQuestion,
-        finishQuiz,
-        isTimeUp,
-        clearQuiz,
-        isCurrentAnswered
-    };
-})();
+};

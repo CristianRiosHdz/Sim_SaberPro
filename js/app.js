@@ -1,8 +1,10 @@
 /* ============================================================
    APP — Punto de entrada de la aplicación
-   Creado por: Cristian Rios (2026)
    Inicializa tema, renderer y vincula evento del toggle.
    ============================================================ */
+
+import { ThemeManager } from './ui/theme.js';
+import { Renderer } from './ui/renderer.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     // Inicializar tema (dark/light)

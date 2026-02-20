@@ -12,10 +12,19 @@
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/auth.css">
+  <link rel="stylesheet" href="css/quiz-images.css">
+
+  <!-- KaTeX (Para fórmulas matemáticas en Quill) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+
+  <!-- Quill WYSIWYG Editor (solo se usa en el admin para editar contenido de estudio) -->
+  <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
 
   <!-- Favicon emoji -->
   <link rel="icon"
-    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📝</text></svg>">
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
 </head>
 
 <body>
@@ -39,10 +48,10 @@
 
     <!-- ── Main Content (SPA container) ── -->
     <main class="app-main" id="app">
-      <!-- El contenido se renderiza dinámicamente por renderer.js -->
+      <!-- El contenido se renderiza dinámicamente -->
       <div class="empty-state" style="padding: var(--spacing-16)">
         <div class="loading-spinner" style="margin: 0 auto"></div>
-        <p style="margin-top: var(--spacing-4); color: var(--color-text-muted)">Cargando simulador...</p>
+        <p style="margin-top: var(--spacing-4); color: var(--color-text-muted)">Iniciando simulador...</p>
       </div>
     </main>
 
@@ -50,40 +59,16 @@
       <div class="footer-inner">
         <p><strong>Simulador Saber Pro</strong> &copy; 2026 — Desarrollado por <strong>Cristian Rios</strong></p>
         <p style="margin-top: var(--spacing-1); font-size: var(--font-size-xs)">
-          Plataforma educativa de práctica. Preguntas basadas en materiales del ICFES, Constitución Política y fuentes
-          académicas.
+          Plataforma educativa de práctica con persistencia en la nube (Supabase).
         </p>
       </div>
     </footer>
   </div>
 
-  <!-- ── JavaScript (orden de dependencias) ── -->
-  <!-- Utilidades -->
-  <script src="js/utils/helpers.js"></script>
-
-  <!-- Datos -->
-  <script src="js/data/modules-config.js"></script>
-  <script src="js/data/lectura-critica.js"></script>
-  <script src="js/data/razonamiento-cuantitativo.js"></script>
-  <script src="js/data/competencias-ciudadanas.js"></script>
-  <script src="js/data/comunicacion-escrita.js"></script>
-  <script src="js/data/ingles.js"></script>
-  <script src="js/data/problematicas-psicologicas.js"></script>
-  <script src="js/data/cultura-general.js"></script>
-  <script src="js/data/study-content.js"></script>
-
-  <!-- Motor -->
-  <script src="js/engine/storage.js"></script>
-  <script src="js/engine/quiz-engine.js"></script>
-
-  <!-- UI -->
-  <script src="js/ui/theme.js"></script>
-  <script src="js/ui/modal.js"></script>
-  <script src="js/ui/components.js"></script>
-  <script src="js/ui/renderer.js"></script>
-
-  <!-- Punto de entrada -->
-  <script src="js/app.js"></script>
+  <!-- ── Quill WYSIWYG JS ── -->
+  <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+  <!-- ── JavaScript (ES Modules) ── -->
+  <script type="module" src="js/app.js"></script>
 </body>
 
 </html>

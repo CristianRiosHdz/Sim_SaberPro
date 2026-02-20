@@ -1,0 +1,31 @@
+/* ── Estilos para imágenes en preguntas y opciones ── */
+
+.option-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+    width: 100%;
+}
+
+.option-image {
+    max-width: 100%;
+    max-height: 150px;
+    object-fit: contain;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    margin-top: var(--spacing-2);
+}
+
+.question-image-wrapper {
+    margin: var(--spacing-4) 0;
+    text-align: center;
+}
+
+.question-image {
+    max-width: 100%;
+    max-height: 350px;
+    object-fit: contain;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--color-border);
+}

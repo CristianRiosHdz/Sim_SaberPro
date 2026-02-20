@@ -1,0 +1,26 @@
+# Dependencias
+node_modules/
+package-lock.json
+
+# IDEs y Editores
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Sistema Operativo
+.DS_Store
+Thumbs.db
+
+# Logs y Temporales
+*.log
+npm-debug.log*
+.agent/
+.gemini/
+tmp/
+dist/
+build/
+
+# Entorno
+.env
+.env.local

@@ -947,7 +947,8 @@
     background: transparent;
     border: none;
     color: var(--color-text-muted);
-    font-weight: var(--spacing-400); /* Adjusted to semi-bold/medium if tokens exist */
+    font-weight: var(--spacing-400);
+    /* Adjusted to semi-bold/medium if tokens exist */
     transition: all var(--transition-fast);
     text-align: left;
     cursor: pointer;
@@ -1041,7 +1042,27 @@
     line-height: 1.7;
 }
 
-.study-section-body ul, .study-section-body ol {
+.study-section-body img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-lg);
+    margin: var(--spacing-4) 0;
+    display: block;
+    box-shadow: var(--shadow-sm);
+}
+
+.study-section-body ul,
+.study-section-body ol {
+    padding-left: var(--spacing-6);
+    margin: var(--spacing-4) 0;
+}
+
+.study-section-body p {
+    margin-bottom: var(--spacing-4);
+}
+
+.study-section-body ul,
+.study-section-body ol {
     padding-left: var(--spacing-6);
     margin-top: var(--spacing-4);
 }
@@ -1081,7 +1102,8 @@
     font-size: var(--font-size-sm);
 }
 
-.study-body th, .study-body td {
+.study-body th,
+.study-body td {
     padding: var(--spacing-3);
     border: 1px solid var(--color-border);
     text-align: left;
@@ -1148,9 +1170,84 @@
     color: var(--color-text-muted);
 }
 
-.pdf-item .resource-icon { color: #ef4444; }
-.video-item .resource-icon { color: #ff0000; }
+.pdf-item .resource-icon {
+    color: #ef4444;
+}
+
+.video-item .resource-icon {
+    color: #ff0000;
+}
 
 
-.academic-item .resource-icon { color: #3b82f6; }
-.resource-item.academic-item:hover { border-color: #3b82f6; }
+.academic-item .resource-icon {
+    color: #3b82f6;
+}
+
+.resource-item.academic-item:hover {
+    border-color: #3b82f6;
+}
+
+/* ── Quill Editor Fixes ── */
+.ql-editor {
+    color: #1F2937 !important;
+    /* Gris muy oscuro, siempre visible en fondo blanco */
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 150px;
+}
+
+.ql-toolbar {
+    background: #F9FAFB !important;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-color: var(--color-border) !important;
+}
+
+.ql-container {
+    background: white !important;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-color: var(--color-border) !important;
+}
+
+/* Fix definitivo para inputs de Quill (fórmulas, links) en Modo Oscuro */
+.ql-snow .ql-tooltip input[type=text],
+.auth-form .ql-tooltip input,
+.ql-tooltip input {
+    color: #1F2937 !important;
+    background-color: white !important;
+    border: 1px solid #d1d5db !important;
+    height: 30px !important;
+    padding: 3px 10px !important;
+    font-size: 14px !important;
+    margin-right: 10px !important;
+}
+
+.ql-tooltip {
+    background-color: white !important;
+    color: #1F2937 !important;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+    border-radius: 8px !important;
+    z-index: 5000;
+}
+
+.ql-tooltip * {
+    color: #1F2937 !important;
+    /* Fuerza color oscuro a todo lo de adentro */
+}
+
+/* ── Fórmulas Matemáticas ── */
+.ql-formula {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 4px;
+    font-size: 1.1em;
+}
+
+.study-section-body .ql-formula,
+.question-body .ql-formula,
+.explanation-box .ql-formula {
+    background: rgba(var(--color-primary-rgb), 0.05);
+    padding: 2px 6px;
+    border-radius: 4px;
+}

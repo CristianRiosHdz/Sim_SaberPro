@@ -2,7 +2,9 @@
    MODAL — Sistema de modales con overlay
    ============================================================ */
 
-const ModalManager = (() => {
+import { escapeHtml } from '../utils/helpers.js';
+
+export const ModalManager = {
     /**
      * Muestra un modal genérico.
      * @param {Object} config
@@ -12,9 +14,9 @@ const ModalManager = (() => {
      * @param {string} config.body - HTML del cuerpo
      * @param {Array<{text, class, onClick}>} config.actions - Botones de acción
      */
-    function show({ iconClass, icon, title, body, actions = [] }) {
+    show({ iconClass, icon, title, body, actions = [] }) {
         // Remover modal existente si hay uno
-        close();
+        this.close();
 
         const actionsHtml = actions.map((action, i) =>
             `<button class="btn ${action.class || 'btn-primary'}" data-modal-action="${i}">${action.text}</button>`
@@ -37,30 +39,36 @@ const ModalManager = (() => {
         // Vincular eventos a botones
         actions.forEach((action, i) => {
             const btn = overlay.querySelector(`[data-modal-action="${i}"]`);
-            if (btn && action.onClick) {
-                btn.addEventListener('click', () => {
-                    action.onClick();
-                    close();
+            if (btn) {
+                btn.addEventListener('click', async () => {
+                    try {
+                        if (action.onClick) await action.onClick();
+                    } finally {
+                        this.close();
+                    }
                 });
             }
         });
 
         // Cerrar al hacer clic fuera del modal
         overlay.addEventListener('click', (e) => {
-            if (e.target === overlay) close();
+            if (e.target === overlay) this.close();
         });
 
         // Cerrar con Escape
-        document.addEventListener('keydown', _handleEscape);
-    }
+        this._escHandler = (e) => {
+            if (e.key === 'Escape') this.close();
+        };
+        document.addEventListener('keydown', this._escHandler);
+    },
 
     /**
      * Muestra modal de módulo bloqueado.
      * @param {string} moduleName - Nombre del módulo bloqueado
      * @param {string} previousModuleName - Nombre del módulo previo que debe aprobarse
      */
-    function showBlocked(moduleName, previousModuleName) {
-        show({
+    showBlocked(moduleName, previousModuleName) {
+        this.show({
             iconClass: 'modal-icon-warning',
             icon: '🔒',
             title: 'Módulo Bloqueado',
@@ -70,7 +78,7 @@ const ModalManager = (() => {
                 { text: 'Entendido', class: 'btn-primary', onClick: () => { } }
             ]
         });
-    }
+    },
 
     /**
      * Muestra modal de confirmación.
@@ -78,8 +86,8 @@ const ModalManager = (() => {
      * @param {string} message
      * @param {Function} onConfirm
      */
-    function showConfirm(title, message, onConfirm) {
-        show({
+    showConfirm(title, message, onConfirm) {
+        this.show({
             iconClass: 'modal-icon-warning',
             icon: '⚠️',
             title,
@@ -89,14 +97,14 @@ const ModalManager = (() => {
                 { text: 'Confirmar', class: 'btn-danger', onClick: onConfirm }
             ]
         });
-    }
+    },
 
     /**
      * Muestra modal de tiempo agotado.
      * @param {Function} onFinish
      */
-    function showTimeUp(onFinish) {
-        show({
+    showTimeUp(onFinish) {
+        this.show({
             iconClass: 'modal-icon-danger',
             icon: '⏰',
             title: '¡Tiempo Agotado!',
@@ -105,27 +113,19 @@ const ModalManager = (() => {
                 { text: 'Ver Resultados', class: 'btn-primary', onClick: onFinish }
             ]
         });
-    }
+    },
 
     /**
      * Cierra el modal activo.
      */
-    function close() {
+    close() {
         const overlay = document.getElementById('modal-overlay');
         if (overlay) {
             overlay.remove();
         }
-        document.removeEventListener('keydown', _handleEscape);
+        if (this._escHandler) {
+            document.removeEventListener('keydown', this._escHandler);
+            this._escHandler = null;
+        }
     }
-
-    /**
-     * Manejador de tecla Escape.
-     * @param {KeyboardEvent} e
-     * @private
-     */
-    function _handleEscape(e) {
-        if (e.key === 'Escape') close();
-    }
-
-    return { show, showBlocked, showConfirm, showTimeUp, close };
-})();
+};

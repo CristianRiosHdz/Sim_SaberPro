@@ -1,219 +1,185 @@
 /* ============================================================
-   STORAGE — Wrapper inmutable sobre LocalStorage
-   Capa de datos para persistencia del progreso del usuario.
-   Toda interacción con LocalStorage pasa por aquí.
+   STORAGE — Capa de persistencia con Supabase
+   Reemplaza el uso de LocalStorage por llamadas a Supabase.
    ============================================================ */
 
-const StorageManager = (() => {
-    const STORAGE_KEY = 'saberPro_progress';
+import { ExamService } from '../services/exam-service.js';
+import { AuthService } from '../services/auth-service.js';
+import { ContentService } from '../services/content-service.js';
+import { calculatePercentage } from '../utils/helpers.js';
 
-    /**
-     * Obtiene el estado completo almacenado.
-     * @returns {Object} Estado persistido
-     */
-    function _getState() {
-        try {
-            const raw = localStorage.getItem(STORAGE_KEY);
-            if (!raw) return _getDefaultState();
-            return JSON.parse(raw);
-        } catch {
-            console.warn('[Storage] Error al leer localStorage, reiniciando estado.');
-            return _getDefaultState();
+export const StorageManager = {
+    // Cache local para evitar llamadas excesivas y mantener sincronía UI
+    _state: {
+        modules: [],
+        moduleResults: {},
+        attemptHistory: [],
+        totalAttempts: 0,
+        settings: {
+            freeMode: false
         }
-    }
+    },
 
     /**
-     * Guarda el estado completo.
-     * @param {Object} state
+     * Inicializa el estado cargando datos desde Supabase.
      */
-    function _setState(state) {
+    async init() {
+        const user = await AuthService.getCurrentUser();
+        // Cargar módulos siempre (son públicos)
         try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            this._state.modules = await ContentService.getModules();
+        } catch (e) {
+            console.error('Error cargando módulos de DB:', e);
+        }
+
+        if (user) {
+            await this.refreshState(user.id);
+        }
+    },
+
+    /**
+     * Refresca el estado local desde el servidor.
+     * @param {string} userId 
+     */
+    async refreshState(userId) {
+        try {
+            const attempts = await ExamService.getUserExamAttempts(userId);
+            const bestResults = await ExamService.getBestResults(userId);
+
+            this._state.attemptHistory = attempts;
+            this._state.totalAttempts = attempts.length;
+            this._state.moduleResults = bestResults;
+
+            // Nota: Las settings podrían guardarse en una tabla aparte.
+            // Por ahora las mantenemos en memoria o podrías usar metadata de usuario.
+            const sessionSettings = localStorage.getItem('saberPro_settings');
+            if (sessionSettings) {
+                this._state.settings = JSON.parse(sessionSettings);
+            }
         } catch (error) {
-            console.error('[Storage] Error al escribir en localStorage:', error);
+            console.error('[Storage] Error al refrescar estado:', error);
         }
-    }
-
-    /**
-     * Estado por defecto cuando no hay datos previos.
-     * @returns {Object}
-     */
-    function _getDefaultState() {
-        return {
-            moduleResults: {},
-            attemptHistory: [],
-            totalAttempts: 0,
-            settings: {
-                freeMode: false // Por defecto los módulos van en orden
-            },
-            createdAt: new Date().toISOString()
-        };
-    }
+    },
 
     /**
      * Guarda el resultado de un intento de módulo.
      * @param {string} moduleId - ID del módulo
-     * @param {Object} result - { score, totalQuestions, correctAnswers, passed, answers, timeTaken }
+     * @param {Object} result - { score, total_questions, answers, ... }
      */
-    function saveModuleResult(moduleId, result) {
-        const state = _getState();
-        const attemptRecord = {
-            moduleId,
-            ...result,
-            timestamp: new Date().toISOString()
+    async saveModuleResult(moduleId, result) {
+        const attemptData = {
+            module: moduleId,
+            score: result.score,
+            total_questions: result.totalQuestions || result.total_questions,
+            answers: result.answers
         };
 
-        // Guardar mejor resultado para el módulo
-        const existingResult = state.moduleResults[moduleId];
-        if (!existingResult || result.score > existingResult.score) {
-            state.moduleResults[moduleId] = attemptRecord;
+        // 1. Guardar en Supabase
+        await ExamService.saveExamAttempt(attemptData);
+
+        // 2. Actualizar cache local
+        const user = await AuthService.getCurrentUser();
+        if (user) {
+            await this.refreshState(user.id);
         }
-
-        // Guardar en historial
-        state.attemptHistory.push(attemptRecord);
-        state.totalAttempts += 1;
-
-        _setState(state);
-    }
+    },
 
     /**
      * Obtiene el mejor resultado de un módulo.
      * @param {string} moduleId
      * @returns {Object|null}
      */
-    function getModuleResult(moduleId) {
-        const state = _getState();
-        return state.moduleResults[moduleId] || null;
-    }
+    getModuleResult(moduleId) {
+        return this._state.moduleResults[moduleId] || null;
+    },
 
     /**
      * Verifica si un módulo está desbloqueado.
-     * El módulo N está desbloqueado si el módulo N-1 fue aprobado.
      * @param {string} moduleId
-     * @param {Array} modulesOrder - Lista ordenada de IDs de módulos
+     * @param {Array} modulesOrder
      * @returns {boolean}
      */
-    function isModuleUnlocked(moduleId, modulesOrder) {
-        const state = _getState();
-
-        // Si el modo libre está activado, todo está desbloqueado
-        if (state.settings && state.settings.freeMode) {
-            return true;
-        }
+    isModuleUnlocked(moduleId, modulesOrder) {
+        if (this._state.settings.freeMode) return true;
 
         const moduleIndex = modulesOrder.indexOf(moduleId);
-
-        // El primer módulo siempre está desbloqueado
         if (moduleIndex <= 0) return true;
 
-        // Verificar si el módulo anterior fue aprobado
         const previousModuleId = modulesOrder[moduleIndex - 1];
-        const previousResult = getModuleResult(previousModuleId);
+        const previousResult = this.getModuleResult(previousModuleId);
 
-        return previousResult !== null && previousResult.passed === true;
-    }
-
-    /**
-     * Obtiene todos los resultados de módulos.
-     * @returns {Object} Mapa de moduleId -> resultado
-     */
-    function getAllResults() {
-        return _getState().moduleResults;
-    }
+        // Consideramos aprobado si tiene un resultado y superó el umbral (p.e. 60%)
+        // En el sistema original se usaba previousResult.passed
+        return previousResult !== null && previousResult.score >= 60;
+    },
 
     /**
-     * Obtiene el historial completo de intentos.
-     * @returns {Array}
+     * Obtiene estadísticas globales.
+     * @param {Array} modulesOrder
      */
-    function getAttemptHistory() {
-        return _getState().attemptHistory;
-    }
-
-    /**
-     * Calcula estadísticas globales del usuario.
-     * @param {Array} modulesOrder - Lista ordenada de IDs de módulos
-     * @returns {Object}
-     */
-    function getStats(modulesOrder) {
-        const state = _getState();
-        const results = state.moduleResults;
+    getStats() {
+        const modulesOrder = this.getModulesOrder();
+        const results = this._state.moduleResults;
+        const totalModules = modulesOrder.length;
 
         const modulesCompleted = Object.keys(results).filter(
-            id => results[id] && results[id].passed
+            id => results[id] && results[id].score >= 60
         ).length;
-
-        const totalModules = modulesOrder.length;
 
         const allScores = Object.values(results).map(r => r.score);
         const averageScore = allScores.length > 0
             ? Math.round(allScores.reduce((sum, s) => sum + s, 0) / allScores.length)
             : 0;
 
-        const totalCorrect = Object.values(results)
-            .reduce((sum, r) => sum + (r.correctAnswers || 0), 0);
-        const totalQuestions = Object.values(results)
-            .reduce((sum, r) => sum + (r.totalQuestions || 0), 0);
-
         return {
             modulesCompleted,
             totalModules,
             progressPercentage: calculatePercentage(modulesCompleted, totalModules),
             averageScore,
-            totalAttempts: state.totalAttempts,
-            totalCorrect,
-            totalQuestions,
-            allPassed: modulesCompleted === totalModules
+            totalAttempts: this._state.totalAttempts,
+            allPassed: modulesCompleted === totalModules && totalModules > 0
         };
-    }
+    },
 
     /**
-     * Reinicia todo el progreso del usuario.
+     * Métodos dinámicos de módulos (reemplazan modules-config.js)
      */
-    function resetProgress() {
-        _setState(_getDefaultState());
-    }
+    getModules() {
+        return this._state.modules;
+    },
+
+    getModulesOrder() {
+        return this._state.modules.map(m => m.id);
+    },
+
+    getModuleById(moduleId) {
+        return this._state.modules.find(m => m.id === moduleId);
+    },
 
     /**
-     * Verifica si el usuario puede reiniciar todo el simulacro.
-     * Solo permitido si aprobó todos los módulos.
-     * @param {Array} modulesOrder
-     * @returns {boolean}
+     * Obtiene la configuración.
      */
-    function canRestartSimulator(modulesOrder) {
-        const stats = getStats(modulesOrder);
-        return stats.allPassed;
-    }
+    getSettings() {
+        return this._state.settings;
+    },
 
     /**
-     * Obtiene la configuración actual del simulador.
-     * @returns {Object}
+     * Actualiza la configuración.
      */
-    function getSettings() {
-        const state = _getState();
-        return state.settings || _getDefaultState().settings;
-    }
+    updateSettings(newSettings) {
+        this._state.settings = { ...this._state.settings, ...newSettings };
+        // Las settings las mantenemos en localStorage por ahora por ser locales al dispositivo
+        // o podrías crear una tabla 'user_settings' en Supabase.
+        localStorage.setItem('saberPro_settings', JSON.stringify(this._state.settings));
+    },
 
     /**
-     * Actualiza la configuración del simulador.
-     * @param {Object} newSettings
+     * Limpia el progreso (Solo cache local, en Supabase se mantiene por seguridad 
+     * a menos que se implemente un delete masivo).
      */
-    function updateSettings(newSettings) {
-        const state = _getState();
-        state.settings = { ...state.settings, ...newSettings };
-        _setState(state);
+    resetProgress() {
+        this._state.moduleResults = {};
+        this._state.attemptHistory = [];
+        this._state.totalAttempts = 0;
     }
-
-    // API pública
-    return {
-        saveModuleResult,
-        getModuleResult,
-        isModuleUnlocked,
-        getAllResults,
-        getAttemptHistory,
-        getStats,
-        resetProgress,
-        canRestartSimulator,
-        getSettings,
-        updateSettings
-    };
-})();
+};

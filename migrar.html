@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saber Pro — Migrador de Datos</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f4f7f6;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #4F46E5;
+            margin-top: 0;
+        }
+
+        #log {
+            font-family: monospace;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 20px 0;
+        }
+
+        .status {
+            font-weight: bold;
+        }
+
+        .success {
+            color: #10b981;
+        }
+
+        .error {
+            color: #ef4444;
+        }
+
+        .warning {
+            color: #f59e0b;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #4F46E5;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            font-size: 16px;
+        }
+
+        .btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <h1>🚀 Migrador de Datos Saber Pro</h1>
+        <p>Este proceso tomará las preguntas de tus archivos locales (.js) y las subirá a tu base de datos de Supabase.
+            Asegúrate de haber ejecutado el SQL para los 7 módulos primero.</p>
+
+        <button id="start-btn" class="btn">Comenzar Migración</button>
+
+        <div id="log">Esperando inicio...</div>
+
+        <div id="final-actions" style="display:none">
+            <p class="status success">✅ ¡Migración finalizada con éxito!</p>
+            <p>Ahora puedes volver al simulador y ver tus 7 módulos con todas sus preguntas.</p>
+            <a href="index.html" class="btn">Volver al Simulador</a>
+        </div>
+    </div>
+
+    <script type="module">
+        import { ContentService } from './js/services/content-service.js';
+
+        // Importación de bancos locales
+        import { LECTURA_CRITICA_QUESTIONS } from './js/data/lectura-critica.js';
+        import { RAZONAMIENTO_CUANTITATIVO_QUESTIONS } from './js/data/razonamiento-cuantitativo.js';
+        import { COMPETENCIAS_CIUDADANAS_QUESTIONS } from './js/data/competencias-ciudadanas.js';
+        import { COMUNICACION_ESCRITA_QUESTIONS } from './js/data/comunicacion-escrita.js';
+        import { INGLES_QUESTIONS } from './js/data/ingles.js';
+        import { PROBLEMATICAS_PSICOLOGICAS_QUESTIONS } from './js/data/problematicas-psicologicas.js';
+        import { CULTURA_GENERAL_QUESTIONS } from './js/data/cultura-general.js';
+
+        const banks = {
+            'lectura-critica': LECTURA_CRITICA_QUESTIONS,
+            'razonamiento-cuantitativo': RAZONAMIENTO_CUANTITATIVO_QUESTIONS,
+            'competencias-ciudadanas': COMPETENCIAS_CIUDADANAS_QUESTIONS,
+            'comunicacion-escrita': COMUNICACION_ESCRITA_QUESTIONS,
+            'ingles': INGLES_QUESTIONS,
+            'problematicas-psicologicas': PROBLEMATICAS_PSICOLOGICAS_QUESTIONS,
+            'cultura-general': CULTURA_GENERAL_QUESTIONS
+        };
+
+        const logEl = document.getElementById('log');
+        const btn = document.getElementById('start-btn');
+
+        function addLog(msg, type = '') {
+            const span = document.createElement('div');
+            if (type) span.className = type;
+            span.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            logEl.appendChild(span);
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+
+        btn.addEventListener('click', async () => {
+            btn.disabled = true;
+            logEl.innerHTML = '';
+            addLog('Iniciando proceso de migración...', 'status');
+
+            try {
+                for (const [moduleId, questions] of Object.entries(banks)) {
+                    addLog(`Procesando módulo: ${moduleId} (${questions.length} preguntas)`);
+
+                    // Subir en lotes o una por una (ContentService.addQuestion usa insert individual)
+                    for (let i = 0; i < questions.length; i++) {
+                        const q = questions[i];
+                        try {
+                            await ContentService.addQuestion({
+                                module_id: moduleId,
+                                context: q.context || null,
+                                text: q.text,
+                                options: q.options,
+                                correctAnswer: q.correctAnswer, // El service lo mapeará a correct_answer
+                                explanation: q.explanation || ''
+                            });
+                            if ((i + 1) % 5 === 0) {
+                                addLog(`... ${i + 1}/${questions.length} completadas`, 'warning');
+                            }
+                        } catch (err) {
+                            addLog(`❌ Error en pregunta ${i + 1} de ${moduleId}: ${err.message}`, 'error');
+                        }
+                    }
+                    addLog(`✅ Módulo ${moduleId} finalizado.`, 'success');
+                }
+
+                document.getElementById('final-actions').style.display = 'block';
+            } catch (globalErr) {
+                addLog(`CRITICAL ERROR: ${globalErr.message}`, 'error');
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+
+</html>
