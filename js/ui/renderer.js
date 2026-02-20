@@ -331,43 +331,93 @@ export const Renderer = {
             <div class="auth-container fade-in">
                 <div class="auth-card card">
                     <div class="auth-header">
-                        <div class="auth-logo">🆕</div>
+                        <div class="auth-logo">🔐</div>
                         <h2>Nueva Contraseña</h2>
-                        <p>Escribe tu nueva clave de acceso.</p>
+                        <p>Asegura tu cuenta con una clave fuerte.</p>
                     </div>
                     <form id="reset-form" class="auth-form">
                         <div class="form-group">
                             <label for="new-password">Nueva Contraseña</label>
-                            <input type="password" id="new-password" required minlength="6" placeholder="Mínimo 6 caracteres">
+                            <input type="password" id="new-password" required placeholder="Ingresa tu nueva clave">
+                            <div id="password-requirements" style="font-size: 11px; color: var(--color-text-muted); margin-top: 8px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px">
+                                <span id="req-len">❌ Mín. 8 caracteres</span>
+                                <span id="req-up">❌ 1 Mayúscula</span>
+                                <span id="req-num">❌ 1 Número</span>
+                                <span id="req-spec">❌ 1 Especial</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm-password">Confirmar Contraseña</label>
+                            <input type="password" id="confirm-password" required placeholder="Repite tu nueva clave">
                         </div>
                         <div id="auth-error" class="auth-error-msg hidden"></div>
-                        <button type="submit" class="btn btn-primary btn-block">Guardar Nueva Contraseña</button>
+                        <button type="submit" class="btn btn-primary btn-block" id="btn-save-pass" disabled>Guardar Nueva Contraseña</button>
                     </form>
                 </div>
             </div>
         `;
 
+        const passInput = document.getElementById('new-password');
+        const confirmInput = document.getElementById('confirm-password');
+        const submitBtn = document.getElementById('btn-save-pass');
+
+        const validate = () => {
+            const val = passInput.value;
+            const valid = {
+                len: val.length >= 8,
+                up: /[A-Z]/.test(val),
+                num: /[0-9]/.test(val),
+                spec: /[^A-Za-z0-9]/.test(val)
+            };
+
+            const updateReq = (id, isValid) => {
+                const el = document.getElementById(id);
+                el.innerHTML = (isValid ? '✅ ' : '❌ ') + el.innerText.substring(2);
+                el.style.color = isValid ? 'var(--color-success)' : 'var(--color-text-muted)';
+            };
+
+            updateReq('req-len', valid.len);
+            updateReq('req-up', valid.up);
+            updateReq('req-num', valid.num);
+            updateReq('req-spec', valid.spec);
+
+            const matches = val === confirmInput.value && val !== '';
+            const allOk = valid.len && valid.up && valid.num && valid.spec && matches;
+            submitBtn.disabled = !allOk;
+        };
+
+        passInput.addEventListener('input', validate);
+        confirmInput.addEventListener('input', validate);
+
         document.getElementById('reset-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const pass = document.getElementById('new-password').value;
-            const btn = e.target.querySelector('button');
+            const pass = passInput.value;
             const errorEl = document.getElementById('auth-error');
 
             try {
-                btn.disabled = true;
-                btn.textContent = 'Guardando...';
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Actualizando seguridad...';
+
+                // Intentar recuperar sesión si se perdió por refresh
+                const session = await AuthService.getSession();
+                if (!session) throw new Error("La sesión de recuperación ha expirado. Por favor solicita un nuevo enlace.");
+
                 await AuthService.updatePassword(pass);
+
                 ModalManager.show({
-                    icon: '✅',
-                    title: '¡Contraseña Actualizada!',
-                    body: 'Tu clave ha sido cambiada con éxito. Ahora puedes entrar con tus nuevos datos.',
-                    actions: [{ text: 'Continuar', class: 'btn-primary', onClick: () => this.navigateTo('#home') }]
+                    icon: '🚀',
+                    title: '¡Seguridad Actualizada!',
+                    body: 'Tu contraseña ha sido cambiada y ahora cumple con todos los estándares de seguridad.',
+                    actions: [{ text: 'Entrar al Simulador', class: 'btn-primary', onClick: () => this.navigateTo('#home') }]
                 });
             } catch (error) {
-                errorEl.textContent = error.message;
+                console.error("Reset error:", error);
+                errorEl.textContent = error.message.includes('same as old')
+                    ? 'La nueva contraseña no puede ser igual a la anterior.'
+                    : error.message;
                 errorEl.classList.remove('hidden');
-                btn.disabled = false;
-                btn.textContent = 'Guardar Nueva Contraseña';
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Guardar Nueva Contraseña';
             }
         });
     },
