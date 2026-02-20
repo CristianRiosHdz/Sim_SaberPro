@@ -398,10 +398,8 @@ export const Renderer = {
                 submitBtn.disabled = true;
                 submitBtn.textContent = 'Actualizando seguridad...';
 
-                // Intentar recuperar sesión si se perdió por refresh
-                const session = await AuthService.getSession();
-                if (!session) throw new Error("La sesión de recuperación ha expirado. Por favor solicita un nuevo enlace.");
-
+                // Intentamos actualizar directamente.
+                // Si llegamos a esta vista es porque Supabase ya procesó el token del URL.
                 await AuthService.updatePassword(pass);
 
                 ModalManager.show({
@@ -412,9 +410,17 @@ export const Renderer = {
                 });
             } catch (error) {
                 console.error("Reset error:", error);
-                errorEl.textContent = error.message.includes('same as old')
-                    ? 'La nueva contraseña no puede ser igual a la anterior.'
-                    : error.message;
+
+                let msg = "No se pudo actualizar la contraseña. ";
+                if (error.message.includes('same as old')) {
+                    msg = 'La nueva contraseña no puede ser igual a la anterior.';
+                } else if (error.message.includes('Auth session missing') || error.message.includes('expired')) {
+                    msg = 'La sesión de seguridad se ha cerrado. Por favor, solicita un nuevo enlace desde el inicio y no recargues la página al abrirlo.';
+                } else {
+                    msg += error.message;
+                }
+
+                errorEl.textContent = msg;
                 errorEl.classList.remove('hidden');
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Guardar Nueva Contraseña';
