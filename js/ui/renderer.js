@@ -74,6 +74,15 @@ export const Renderer = {
 
     async _handleRoute() {
         const rawHash = window.location.hash || '#home';
+
+        // DETECCIÓN ESPECIAL: Si el hash contiene un token de recuperación de Supabase
+        if (rawHash.includes('type=recovery') || rawHash.includes('access_token=')) {
+            // Si es recuperación, forzamos la ruta a reset-password
+            if (rawHash.includes('type=recovery')) {
+                return this._renderResetPassword();
+            }
+        }
+
         // Supabase añade tokens con & o ?, limpiamos para obtener la ruta real
         const cleanHash = rawHash.split('&')[0].split('?')[0];
         const [route, param] = cleanHash.substring(1).split('/');
