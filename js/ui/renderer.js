@@ -73,8 +73,12 @@ export const Renderer = {
     // ────────────────────────────────────────────────
 
     async _handleRoute() {
-        const hash = window.location.hash || '#home';
-        const [route, param] = hash.substring(1).split('/');
+        const rawHash = window.location.hash || '#home';
+        // Supabase añade tokens con & o ?, limpiamos para obtener la ruta real
+        const cleanHash = rawHash.split('&')[0].split('?')[0];
+        const [route, param] = cleanHash.substring(1).split('/');
+
+        console.log("Navigating to:", route); // Debug
         this._clearTimer();
         this._currentFeedback = null;
 
