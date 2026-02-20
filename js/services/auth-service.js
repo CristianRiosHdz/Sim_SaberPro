@@ -64,8 +64,10 @@ export const AuthService = {
      * Envía un correo para restablecer la contraseña.
      */
     async requestPasswordReset(email) {
+        // Obtenemos la URL base actual (ej: https://user.github.io/app/)
+        const baseUrl = window.location.origin + window.location.pathname;
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
-            redirectTo: window.location.origin + window.location.pathname + '#reset-password',
+            redirectTo: `${baseUrl}#reset-password`,
         });
         if (error) throw error;
     },
