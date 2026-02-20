@@ -8,26 +8,19 @@ Este simulador ha sido diseñado para ofrecer una experiencia realista, desafian
 ## 🚀 Características Principales
 
 - **+210 Preguntas Originales:** Banco expandido de 35 preguntas por módulo, diseñadas bajo el marco de referencia del ICFES.
-- **6 Módulos Completos:**
-  - 📖 Lectura Crítica
-  - 📊 Razonamiento Cuantitativo
-  - ⚖️ Competencias Ciudadanas
-  - ✍️ Comunicación Escrita
-  - 🌎 Inglés
-  - 🧠 Análisis de Problemáticas Psicológicas
-- **Dos Modos de Práctica:**
-  - **Modo Secuencial:** Avanza paso a paso desbloqueando niveles.
-  - **Modo Libre:** Practica en cualquier módulo en cualquier momento.
-- **Retroalimentación Inmediata:** Explicaciones detalladas para cada respuesta (correcta o incorrecta).
+- **Gestión Avanzada de Contenido:** Panel administrativo con editor profesional para actualizar temas y preguntas en tiempo real.
+- **Soporte Matemático:** Renderizado de fórmulas complejas con KaTeX (LaTeX).
+- **Retroalimentación Pedagógica:** Explicaciones enriquecidas con formato para cada respuesta.
+- **Biblioteca de Estudio Modular:** Temas organizados por secciones con apoyo multimedia (imágenes y videos).
 - **Simulación Realista:** Temporizadores ajustados según la complejidad de cada módulo.
-- **Biblioteca de Estudio:** Contenido teórico detallado, ejemplos prácticos y tips de expertos para cada área.
-- **Diseño Premium:** Interfaz moderna, rápida y totalmente responsiva.
+- **Diseño Premium:** Interfaz moderna (Tokens de Diseño), rápida y con soporte total para Modo Oscuro.
 
 ## 🛠️ Tecnologías Utilizadas
 
-- **HTML5 & Vanilla JS:** Lógica de motor de búsqueda y persistencia local eficiente.
-- **CSS3 Moderno:** Diseño basado en tokens, variables semánticas y animaciones fluidas.
-- **LocalStorage:** Tu progreso se guarda automáticamente en tu navegador.
+- **Supabase Cloud Backend:** Gestión segura de datos, autenticación y contenido dinámico.
+- **HTML5 & Vanilla JS:** Motor de Single Page Application (SPA) ligero y eficiente.
+- **Quill.js & KaTeX:** Herramientas profesionales para edición y visualización de contenido educativo.
+- **CSS3 Moderno:** Sistema de diseño basado en tokens y animaciones fluidas.
 
 ## 🌐 Demo En Vivo
 
@@ -35,4 +28,4 @@ Puedes acceder al simulador en: **[Saber Pro Simulator — Demo](https://cristia
 
 ---
 
-*Proyecto diseñado con fines educativos.*
+*Proyecto diseñado con fines educativos por Cristian Rios — Febrero 2026.*

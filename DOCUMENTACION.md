@@ -12,9 +12,9 @@ La aplicación es una **Single Page Application (SPA)** pura, construida con Van
 
 ### Componentes Principales:
 - **`index.html`**: Punto de entrada único que carga los estilos, datos y scripts en el orden correcto de dependencia.
-- **`js/app.js`**: Orquestador principal que inicializa el sistema y lanza el Renderer.
-- **`js/ui/renderer.js`**: Actúa como el "Router" de la aplicación, manejando la navegación hash-based (`#home`, `#quiz/id`, `#study`) y renderizando las vistas dinámicamente.
-- **`js/ui/components.js`**: Biblioteca de funciones puras de UI que retornan strings HTML (Diseño Atómico).
+- **`js/ui/renderer.js`**: Actúa como el "Router" de la aplicación, manejando la navegación hash-based (`#home`, `#quiz/id`, `#study`) y gestionando la inicialización de editores interactivos.
+- **`js/ui/components.js`**: Biblioteca de funciones puras de UI que retornan strings HTML (Diseño Atómico), ahora con soporte para renderizado de contenido dinámico de Quill.
+- **`js/services/`**: Capa de servicios para comunicación con **Supabase**, manejando la autenticación y la persistencia de datos en la nube.
 
 ---
 
@@ -51,38 +51,44 @@ El contenido está desacoplado de la lógica para permitir ediciones rápidas en
 6.  **Análisis Psicopedagógico**: Ética (Ley 1090) y modelos de intervención.
 7.  **Cultura General**: Historia, ciencia y artes universales.
 
+### Gestión de Contenido Dinámico:
+A diferencia de versiones anteriores, el contenido ya no es estático:
+- **Editor Enriquecido**: Uso de `Quill.js` para crear enunciados con formato, listas y multimedia (imágenes/videos).
+- **Soporte Matemático**: Integración de `KaTeX` para el renderizado de fórmulas complejas en lenguaje LaTeX.
+
 ### Estructura de una Pregunta:
 Cada objeto de pregunta contiene:
 - `id`: Identificador único.
-- `context`: Texto base o situación de estudio.
-- `text`: La pregunta específica.
-- `options`: 4 alternativas con ID propio.
+- `context`: Texto base o situación de estudio (Renderizado HTML).
+- `text`: La pregunta específica (Renderizado HTML).
+- `options`: 4 alternativas con ID propio (pueden incluir imágenes).
 - `correctAnswer`: El ID de la opción válida.
-- `explanation`: Justificación pedagógica (clave para el aprendizaje).
+- `explanation`: Justificación pedagógica enriquecida.
 
 ---
 
-## 4. Biblioteca de Estudio Autocontenida 📚
+## 4. Biblioteca de Estudio Modular 📚
 
-A diferencia de otros simuladores, este cuenta con una **Biblioteca de Estudio** integrada (`study-content.js`) que ofrece:
-- **Teoría Destilada**: Conceptos clave sin necesidad de navegar a sitios externos.
+A diferencia de otros simuladores, este cuenta con una **Biblioteca de Estudio** enriquecida que ofrece:
+- **Estructura por Temas**: El contenido se divide en secciones tituladas (temas) para facilitar el estudio progresivo.
+- **Multimedia e Interactividad**: Incorporación de videos educativos y diagramas directamente en los temas.
+- **Fórmulas Científicas**: Renderizado de alta calidad para leyes físicas y modelos matemáticos.
 - **Tips de Expertos**: Estrategias para abordar cada tipo de pregunta.
-- **Resiliencia**: El contenido está escrito en código, lo que garantiza que nunca habrá "enlaces rotos" o videos caídos para la teoría fundamental.
 
 ---
 
-## 5. Persistencia y Progreso (`storage.js`) 💾
+## 5. Persistencia y Nube (`Supabase`) 💾
 
-La plataforma utiliza el **LocalStorage** del navegador para guardar el progreso del usuario localmente y de forma privada.
-- **Seguimiento**: Guarda qué módulos han sido aprobados y el puntaje máximo obtenido.
-- **Configuración**: Almacena preferencias como el Modo de Práctica (Secuencial o Libre).
+La plataforma utiliza una arquitectura híbrida de persistencia:
+- **Supabase Cloud Backend**: Gestión centralizada y segura de contenidos, preguntas y perfiles en tiempo real.
+- **LocalStorage**: Caché local para preferencias rápidas y estado de sesión.
 
 ---
 
 ## 6. Diseño y Estética 🎨
 
 La interfaz utiliza un sistema de **Tokens de Diseño** (`tokens.css`) para mantener la consistencia:
-- **Modo Oscuro/Claro**: Adaptable según la preferencia del usuario.
+- **Modo Oscuro/Claro**: Adaptable según la preferencia del usuario, con correcciones automáticas de contraste para editores.
 - **Responsive**: Optimizado para PC, Tableta y Móvil.
 - **Micro-animaciones**: Transiciones suaves al navegar entre preguntas para reducir la fatiga cognitiva.
 
