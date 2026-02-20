@@ -28,6 +28,14 @@ export const Renderer = {
         // Escuchar cambios de autenticación
         AuthService.onAuthStateChange(async (event, session) => {
             const newUser = session?.user || null;
+
+            if (event === 'PASSWORD_RECOVERY') {
+                this._currentUser = newUser;
+                console.log("Recovery mode active");
+                this.navigateTo('#reset-password');
+                return;
+            }
+
             if (this._currentUser?.id === newUser?.id && event !== 'SIGNED_OUT') return;
 
             this._currentUser = newUser;
@@ -78,6 +86,12 @@ export const Renderer = {
         if (route === 'register') {
             if (this._currentUser) return this.navigateTo('#home');
             return this._renderRegister();
+        }
+        if (route === 'forgot-password') {
+            return this._renderForgotPassword();
+        }
+        if (route === 'reset-password') {
+            return this._renderResetPassword();
         }
 
         // Guard de autenticación
@@ -140,7 +154,10 @@ export const Renderer = {
                             <input type="email" id="email" required placeholder="ejemplo@correo.com">
                         </div>
                         <div class="form-group">
-                            <label for="password">Contraseña</label>
+                            <div style="display: flex; justify-content: space-between; align-items: center">
+                                <label for="password">Contraseña</label>
+                                <a href="#forgot-password" style="font-size: 12px; color: var(--color-primary); text-decoration: none">¿Olvidaste tu contraseña?</a>
+                            </div>
                             <input type="password" id="password" required placeholder="••••••••">
                         </div>
                         <div id="auth-error" class="auth-error-msg hidden"></div>
@@ -225,11 +242,15 @@ export const Renderer = {
                 submitBtn.disabled = true;
                 submitBtn.textContent = 'Creando cuenta...';
                 errorEl.classList.add('hidden');
+
+                // Opción 1: Supabase envía correo (default).
+                // Opción 2: Si el admin desactiva "Confirm Email", inicia sesión directo.
                 await AuthService.register(email, password);
+
                 ModalManager.show({
-                    icon: '📧',
-                    title: 'Verifica tu correo',
-                    body: 'Te hemos enviado un enlace de confirmación. Por favor revisa tu bandeja de entrada.',
+                    icon: '🎉',
+                    title: '¡Cuenta creada!',
+                    body: 'Tu cuenta ha sido registrada con éxito. Ya puedes iniciar sesión y comenzar tu preparación. <br><br><small>(Si recibes un correo de confirmación, puedes activarlo después, pero ya tienes acceso prioritario)</small>',
                     actions: [{ text: 'Ir al Login', class: 'btn-primary', onClick: () => this.navigateTo('#login') }]
                 });
             } catch (error) {
@@ -237,6 +258,103 @@ export const Renderer = {
                 errorEl.classList.remove('hidden');
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Registrarse';
+            }
+        });
+    },
+
+    _renderForgotPassword() {
+        const main = document.getElementById('app');
+        main.innerHTML = `
+            <div class="auth-container fade-in">
+                <div class="auth-card card">
+                    <div class="auth-header">
+                        <div class="auth-logo">🔑</div>
+                        <h2>Recuperar Contraseña</h2>
+                        <p>Ingresa tu correo y te enviaremos un enlace para restaurar tu acceso.</p>
+                    </div>
+                    <form id="forgot-form" class="auth-form">
+                        <div class="form-group">
+                            <label for="email">Correo Electrónico</label>
+                            <input type="email" id="email" required placeholder="tu@correo.com">
+                        </div>
+                        <div id="auth-error" class="auth-error-msg hidden"></div>
+                        <button type="submit" class="btn btn-primary btn-block">Enviar Enlace de Recuperación</button>
+                    </form>
+                    <div class="auth-footer">
+                        <p><a href="#login">← Volver al Login</a></p>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.getElementById('forgot-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = e.target.email.value;
+            const btn = e.target.querySelector('button');
+            const errorEl = document.getElementById('auth-error');
+
+            try {
+                btn.disabled = true;
+                btn.textContent = 'Enviando...';
+                await AuthService.requestPasswordReset(email);
+                ModalManager.show({
+                    icon: '📧',
+                    title: 'Correo Enviado',
+                    body: 'Si el correo existe en nuestra base de datos, recibirás un enlace en unos momentos.',
+                    actions: [{ text: 'Entendido', class: 'btn-primary', onClick: () => this.navigateTo('#login') }]
+                });
+            } catch (error) {
+                errorEl.textContent = error.message;
+                errorEl.classList.remove('hidden');
+                btn.disabled = false;
+                btn.textContent = 'Enviar Enlace';
+            }
+        });
+    },
+
+    _renderResetPassword() {
+        const main = document.getElementById('app');
+        main.innerHTML = `
+            <div class="auth-container fade-in">
+                <div class="auth-card card">
+                    <div class="auth-header">
+                        <div class="auth-logo">🆕</div>
+                        <h2>Nueva Contraseña</h2>
+                        <p>Escribe tu nueva clave de acceso.</p>
+                    </div>
+                    <form id="reset-form" class="auth-form">
+                        <div class="form-group">
+                            <label for="new-password">Nueva Contraseña</label>
+                            <input type="password" id="new-password" required minlength="6" placeholder="Mínimo 6 caracteres">
+                        </div>
+                        <div id="auth-error" class="auth-error-msg hidden"></div>
+                        <button type="submit" class="btn btn-primary btn-block">Guardar Nueva Contraseña</button>
+                    </form>
+                </div>
+            </div>
+        `;
+
+        document.getElementById('reset-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const pass = document.getElementById('new-password').value;
+            const btn = e.target.querySelector('button');
+            const errorEl = document.getElementById('auth-error');
+
+            try {
+                btn.disabled = true;
+                btn.textContent = 'Guardando...';
+                await AuthService.updatePassword(pass);
+                ModalManager.show({
+                    icon: '✅',
+                    title: '¡Contraseña Actualizada!',
+                    body: 'Tu clave ha sido cambiada con éxito. Ahora puedes entrar con tus nuevos datos.',
+                    actions: [{ text: 'Continuar', class: 'btn-primary', onClick: () => this.navigateTo('#home') }]
+                });
+            } catch (error) {
+                errorEl.textContent = error.message;
+                errorEl.classList.remove('hidden');
+                btn.disabled = false;
+                btn.textContent = 'Guardar Nueva Contraseña';
             }
         });
     },

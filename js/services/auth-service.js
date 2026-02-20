@@ -61,6 +61,26 @@ export const AuthService = {
     },
 
     /**
+     * Envía un correo para restablecer la contraseña.
+     */
+    async requestPasswordReset(email) {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+            redirectTo: window.location.origin + window.location.pathname + '#reset-password',
+        });
+        if (error) throw error;
+    },
+
+    /**
+     * Actualiza la contraseña del usuario actual (usado tras reset).
+     */
+    async updatePassword(newPassword) {
+        const { error } = await supabase.auth.updateUser({
+            password: newPassword
+        });
+        if (error) throw error;
+    },
+
+    /**
      * Escucha cambios en el estado de autenticación.
      * @param {Function} callback 
      */
