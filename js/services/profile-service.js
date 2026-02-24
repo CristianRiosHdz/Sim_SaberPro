@@ -57,34 +57,51 @@ export const ProfileService = {
      * Obtiene todos los usuarios con sus estadísticas resumidas (solo para admins).
      */
     async getAllUsersWithStats() {
-        // En un entorno real, esto debería estar protegido por RLS o una Edge Function
-        // Aquí asumimos que el admin tiene permiso
-        const { data: profiles, error: pError } = await supabase
-            .from('profiles')
-            .select('*')
-            .order('full_name', { ascending: true });
+        try {
+            // Intentar obtener perfiles
+            const { data: profiles, error: pError } = await supabase
+                .from('profiles')
+                .select('*')
+                .order('full_name', { ascending: true });
 
-        if (pError) throw pError;
+            if (pError) {
+                console.error('[ProfileService] Error al obtener perfiles:', pError);
+                // Si es un error de RLS o permisos, lanzamos algo legible
+                if (pError.code === '42501') {
+                    throw new Error('No tienes permisos suficientes para ver la lista de estudiantes. Verifica las políticas RLS en Supabase.');
+                }
+                throw pError;
+            }
 
-        const { data: attempts, error: aError } = await supabase
-            .from('exam_attempts')
-            .select('user_id, module, score, created_at');
+            // Intentar obtener intentos
+            const { data: attempts, error: aError } = await supabase
+                .from('exam_attempts')
+                .select('user_id, module, score, created_at');
 
-        if (aError) throw aError;
+            if (aError) {
+                console.warn('[ProfileService] No se pudieron cargar las estadísticas detalladas:', aError);
+                // No bloqueamos toda la vista si fallan solo los intentos, pero notificamos
+            }
 
-        // Combinar datos
-        return profiles.map(profile => {
-            const userAttempts = attempts.filter(a => a.user_id === profile.id);
-            return {
-                ...profile,
-                totalAttempts: userAttempts.length,
-                bestResults: userAttempts.reduce((acc, curr) => {
-                    if (!acc[curr.module] || curr.score > acc[curr.module]) {
-                        acc[curr.module] = curr.score;
-                    }
-                    return acc;
-                }, {})
-            };
-        });
+            const attemptsData = attempts || [];
+
+            // Combinar datos
+            return profiles.map(profile => {
+                const userAttempts = attemptsData.filter(a => a.user_id === profile.id);
+                return {
+                    ...profile,
+                    totalAttempts: userAttempts.length,
+                    bestResults: userAttempts.reduce((acc, curr) => {
+                        if (!acc[curr.module] || curr.score > acc[curr.module]) {
+                            acc[curr.module] = curr.score;
+                        }
+                        return acc;
+                    }, {})
+                };
+            });
+        } catch (error) {
+            console.error('[ProfileService] Error crítico en getAllUsersWithStats:', error);
+            throw error;
+        }
     }
 };

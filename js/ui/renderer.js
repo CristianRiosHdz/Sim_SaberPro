@@ -469,11 +469,33 @@ export const Renderer = {
 
     async _renderAdmin() {
         const main = document.getElementById('app');
-        const modules = await ContentService.getModules();
-        const users = await ProfileService.getAllUsersWithStats();
-        main.innerHTML = Components.adminDashboard(modules, users);
+        main.innerHTML = '<div style="padding: 40px; text-align: center">Cargando panel de administración...</div>';
 
-        this._bindAdminEvents();
+        try {
+            const modules = await ContentService.getModules();
+            let users = [];
+
+            try {
+                users = await ProfileService.getAllUsersWithStats();
+            } catch (userError) {
+                console.error('Error loading users:', userError);
+                // Si falla la carga de usuarios (por RLS), permitimos entrar al dashboard 
+                // pero informamos en la consola o podrías mostrar un aviso.
+                // Aquí el dashboard mostrará "0 estudiantes" o el error si lo manejamos en Components.
+            }
+
+            main.innerHTML = Components.adminDashboard(modules, users);
+            this._bindAdminEvents();
+        } catch (error) {
+            main.innerHTML = `
+                <div class="card" style="margin: 40px auto; max-width: 600px; padding: 40px; text-align: center">
+                    <h2 style="color: var(--color-danger)">⚠️ Error al cargar Admin</h2>
+                    <p>${error.message}</p>
+                    <button class="btn btn-primary" onclick="window.location.reload()" style="margin-top: 20px">Reintentar</button>
+                    <button class="btn btn-ghost" onclick="window.location.hash='#home'" style="margin-top: 10px">Volver al Inicio</button>
+                </div>
+            `;
+        }
     },
 
     _bindAdminEvents() {
