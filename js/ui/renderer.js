@@ -261,10 +261,10 @@ export const Renderer = {
                 await AuthService.register(email, password);
 
                 ModalManager.show({
-                    icon: '🎉',
-                    title: '¡Cuenta creada!',
-                    body: 'Tu cuenta ha sido registrada con éxito. Ya puedes iniciar sesión y comenzar tu preparación. <br><br><small>(Si recibes un correo de confirmación, puedes activarlo después, pero ya tienes acceso prioritario)</small>',
-                    actions: [{ text: 'Ir al Login', class: 'btn-primary', onClick: () => this.navigateTo('#login') }]
+                    icon: '📧',
+                    title: '¡Verifica tu correo!',
+                    body: 'Hemos enviado un enlace de activación a tu correo electrónico. Por favor, <strong>haz clic en el enlace</strong> para completar tu registro y configurar tu perfil.',
+                    actions: [{ text: 'Entendido', class: 'btn-primary', onClick: () => this.navigateTo('#login') }]
                 });
             } catch (error) {
                 errorEl.textContent = 'Error: ' + error.message;
