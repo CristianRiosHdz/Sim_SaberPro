@@ -12,9 +12,15 @@ export const AuthService = {
      * @param {string} password 
      */
     async register(email, password) {
+        // Obtenemos la URL base actual para la redirección tras confirmar correo
+        const baseUrl = window.location.origin + window.location.pathname;
         const { data, error } = await supabase.auth.signUp({
             email,
             password,
+            options: {
+                // Supabase redirigirá aquí tras hacer clic en el botón del correo
+                emailRedirectTo: `${baseUrl}#profile-setup`,
+            }
         });
         if (error) throw error;
         return data;
