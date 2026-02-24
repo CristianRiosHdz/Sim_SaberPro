@@ -1,6 +1,6 @@
 /* ============================================================
    APP — Punto de entrada de la aplicación
-   Inicializa tema, renderer y vincula evento del toggle.
+   Versión: 1.1.0 - Sincronizada con correcciones de sesión
    ============================================================ */
 
 import { ThemeManager } from './ui/theme.js';
