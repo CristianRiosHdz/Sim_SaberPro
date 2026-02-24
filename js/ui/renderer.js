@@ -79,7 +79,12 @@ export const Renderer = {
         if (rawHash.includes('type=recovery') || rawHash.includes('access_token=')) {
             // Si es recuperación, forzamos la ruta a reset-password
             if (rawHash.includes('type=recovery')) {
+                console.log("Detectado token de recuperación en URL");
                 return this._renderResetPassword();
+            }
+            // Si es confirmación de registro (signup), permitimos que siga pero marcamos el camino
+            if (rawHash.includes('type=signup')) {
+                console.log("Detectado token de confirmación de cuenta");
             }
         }
 
@@ -113,7 +118,8 @@ export const Renderer = {
         }
 
         // Guard de perfil (si no ha completado el nombre, forzar setup)
-        if (!this._currentProfile?.full_name && route !== 'profile-setup') {
+        // EXCEPCIÓN: No forzar perfil durante el reset de contraseña para evitar redirecciones infinitas o bloqueos
+        if (!this._currentProfile?.full_name && route !== 'profile-setup' && route !== 'reset-password') {
             return this.navigateTo('#profile-setup');
         }
 
